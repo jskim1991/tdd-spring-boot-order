@@ -1,10 +1,12 @@
-package io.jay.tddspringbootorderinsideout.user.tests;
+package io.jay.tddspringbootorderinsideout.user.tests.service;
 
+import io.jay.tddspringbootorderinsideout.share.NameValue;
+import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.store.UserStore;
 import io.jay.tddspringbootorderinsideout.user.User;
 import io.jay.tddspringbootorderinsideout.user.UserJpaStore;
+import io.jay.tddspringbootorderinsideout.user.service.UserLogic;
 import io.jay.tddspringbootorderinsideout.user.store.exception.NoSuchUserException;
-import io.jay.tddspringbootorderinsideout.user.store.repository.UserEntity;
 import io.jay.tddspringbootorderinsideout.user.tests.doubles.FakeUserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,44 +17,34 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserStoreTests {
+public class UserServiceTests {
 
     private User john;
     private User sam;
-    private UserEntity johnEntity;
-    private UserEntity samEntity;
-
-    private FakeUserJpaRepository fakeUserJpaRepository;
-    private UserJpaStore userStore;
+    private UserStore userStore;
+    private UserLogic userLogic;
 
     @BeforeEach
     void setUp() {
         john = new User();
         john.setId("111");
         john.setName("John");
-        johnEntity = new UserEntity();
-        johnEntity.setId(john.getId());
-        johnEntity.setName(john.getName());
-
 
         sam = new User();
         sam.setId("222");
         sam.setName("Sam");
-        samEntity = new UserEntity();
-        samEntity.setId(sam.getId());
-        samEntity.setName(sam.getName());
 
-        fakeUserJpaRepository = new FakeUserJpaRepository();
-        userStore = new UserJpaStore(fakeUserJpaRepository);
+        userStore = new UserJpaStore(new FakeUserJpaRepository());
+        userLogic = new UserLogic(userStore);
     }
 
     @Test
     void test_getAllUsers_returnsUserList() {
-        fakeUserJpaRepository.save(johnEntity);
-        fakeUserJpaRepository.save(samEntity);
+        userStore.addUser(john);
+        userStore.addUser(sam);
 
 
-        List<User> users = userStore.getAllUsers();
+        List<User> users = userLogic.getAll();
 
 
         assertThat(users.get(0).getId(), equalTo("111"));
@@ -63,10 +55,10 @@ public class UserStoreTests {
 
     @Test
     void test_getUser_returnsUser() {
-        fakeUserJpaRepository.save(johnEntity);
+        userStore.addUser(john);
 
 
-        User user = userStore.getUser("111");
+        User user = userLogic.get("111");
 
 
         assertThat(user.getId(), equalTo("111"));
@@ -75,38 +67,49 @@ public class UserStoreTests {
 
     @Test
     void test_getUserWhenEmpty_throwsException() {
-        assertThrows(NoSuchUserException.class, () -> userStore.getUser("999"));
+        assertThrows(NoSuchUserException.class, () -> userLogic.get("999"));
     }
 
     @Test
     void test_addUser_returnsUser() {
-        User savedUser = userStore.addUser(john);
+        User saved = userLogic.add(john);
 
 
-        assertThat(savedUser.getId(), equalTo("111"));
-        assertThat(savedUser.getName(), equalTo("John"));
+        assertThat(saved.getId(), equalTo("111"));
+        assertThat(saved.getName(), equalTo("John"));
     }
 
     @Test
     void test_updateUser_returnsUpdatedUser() {
-        fakeUserJpaRepository.save(johnEntity);
-        john.setPhone("010-1234-5678");
+        userStore.addUser(john);
+        NameValueList nameValueList = new NameValueList();
+        nameValueList.add(new NameValue("phone", "010-1234-5678"));
 
 
-        User updatedUser = userStore.updateUser(john);
+        User updatedUser = userLogic.update("111", nameValueList);
 
 
         assertThat(updatedUser.getPhone(), equalTo("010-1234-5678"));
     }
 
     @Test
+    void test_updateUserWhenEmpty_throwsException() {
+        assertThrows(NoSuchUserException.class, () -> userLogic.update("999", new NameValueList()));
+    }
+
+    @Test
     void test_deleteUser_deletesUser() {
-        fakeUserJpaRepository.save(johnEntity);
+        userStore.addUser(john);
 
 
-        userStore.deleteUser("111");
+        userLogic.delete("111");
 
 
-        assertThat(userStore.getAllUsers().isEmpty(), equalTo(true));
+        assertThat(userLogic.getAll().isEmpty(), equalTo(true));
+    }
+
+    @Test
+    void  test_deleteUserWhenEmpty_throwsException() {
+        assertThrows(NoSuchUserException.class, () -> userLogic.delete("999"));
     }
 }

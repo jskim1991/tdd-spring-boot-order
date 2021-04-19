@@ -1,5 +1,8 @@
 package io.jay.tddspringbootorderinsideout.user;
 
+import io.jay.tddspringbootorderinsideout.share.NameValue;
+import io.jay.tddspringbootorderinsideout.share.NameValueList;
+
 public class User {
 
     private String id;
@@ -50,5 +53,28 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setValues(NameValueList nameValueList) {
+        for (NameValue nameValue : nameValueList.getNameValues()) {
+            String name = nameValue.getName();
+            String value = nameValue.getValue();
+            switch (name) {
+                case "name":
+                    this.name = value;
+                    break;
+                case "email":
+                    this.email = value;
+                    break;
+                case "phone":
+                    this.phone = value;
+                    break;
+                case "password":
+                    this.password = value;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown field " + name);
+            }
+        }
     }
 }
