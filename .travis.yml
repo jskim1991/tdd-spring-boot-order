@@ -12,7 +12,7 @@ matrix:
       language: java
       jdk: oraclejdk11
       install:
-        - gradle assemble
+        - ./gradlew assemble
       script:
         - make travis-tests
 
@@ -21,6 +21,6 @@ matrix:
       language: java
       jdk: oraclejdk11
       install:
-        - gradle assemble
+        - ./gradlew assemble
       script:
         - make travis-integrationtests
