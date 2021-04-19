@@ -23,7 +23,7 @@ public class OrderEntity {
     }
 
     public OrderEntity() {
-        
+
     }
 
     public String getId() {

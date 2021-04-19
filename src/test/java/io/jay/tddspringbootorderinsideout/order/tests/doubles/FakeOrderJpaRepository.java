@@ -1,4 +1,4 @@
-package io.jay.tddspringbootorderinsideout.order.tests.doubles.repository;
+package io.jay.tddspringbootorderinsideout.order.tests.doubles;
 
 
 import io.jay.tddspringbootorderinsideout.order.store.repository.OrderEntity;

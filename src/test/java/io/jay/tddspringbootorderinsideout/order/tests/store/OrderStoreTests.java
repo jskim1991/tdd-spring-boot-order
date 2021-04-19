@@ -1,14 +1,11 @@
 package io.jay.tddspringbootorderinsideout.order.tests.store;
 
 import io.jay.tddspringbootorderinsideout.order.domain.Order;
-import io.jay.tddspringbootorderinsideout.share.NameValue;
-import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.order.store.OrderJpaStore;
 import io.jay.tddspringbootorderinsideout.order.store.OrderStore;
 import io.jay.tddspringbootorderinsideout.order.store.exception.NoSuchOrderException;
 import io.jay.tddspringbootorderinsideout.order.store.repository.OrderEntity;
-import io.jay.tddspringbootorderinsideout.order.tests.doubles.repository.FakeOrderJpaRepository;
-import org.aspectj.weaver.ast.Or;
+import io.jay.tddspringbootorderinsideout.order.tests.doubles.FakeOrderJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

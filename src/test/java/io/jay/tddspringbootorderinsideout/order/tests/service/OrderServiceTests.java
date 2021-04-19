@@ -5,7 +5,7 @@ import io.jay.tddspringbootorderinsideout.order.service.OrderLogic;
 import io.jay.tddspringbootorderinsideout.order.store.OrderJpaStore;
 import io.jay.tddspringbootorderinsideout.order.store.OrderStore;
 import io.jay.tddspringbootorderinsideout.order.store.exception.NoSuchOrderException;
-import io.jay.tddspringbootorderinsideout.order.tests.doubles.repository.FakeOrderJpaRepository;
+import io.jay.tddspringbootorderinsideout.order.tests.doubles.FakeOrderJpaRepository;
 import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import org.junit.jupiter.api.BeforeEach;
