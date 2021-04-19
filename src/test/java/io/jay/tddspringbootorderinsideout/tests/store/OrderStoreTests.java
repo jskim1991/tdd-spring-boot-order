@@ -1,4 +1,4 @@
-package io.jay.tddspringbootorderinsideout.tests;
+package io.jay.tddspringbootorderinsideout.tests.store;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
 import io.jay.tddspringbootorderinsideout.share.NameValue;
