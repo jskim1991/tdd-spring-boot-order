@@ -1,0 +1,26 @@
+---
+cache:
+  bundler: true
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+matrix:
+  include:
+    - name: "Order Service Unit Tests"
+      os: osx
+      language: java
+      jdk: oraclejdk11
+      install:
+        - ./gradlew assemble
+      script:
+        - make travis-tests
+
+    - name: "Order Service Integration Tests"
+      os: osx
+      language: java
+      jdk: oraclejdk11
+      install:
+        - ./gradlew assemble
+      script:
+        - make travis-integrationtests
