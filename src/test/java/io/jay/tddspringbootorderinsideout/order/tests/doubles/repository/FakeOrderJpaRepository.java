@@ -1,7 +1,7 @@
-package io.jay.tddspringbootorderinsideout.tests.doubles.repository;
+package io.jay.tddspringbootorderinsideout.order.tests.doubles.repository;
 
 
-import io.jay.tddspringbootorderinsideout.store.repository.OrderEntity;
+import io.jay.tddspringbootorderinsideout.order.store.repository.OrderEntity;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

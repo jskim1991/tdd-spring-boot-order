@@ -1,4 +1,4 @@
-package io.jay.tddspringbootorderinsideout.store.exception;
+package io.jay.tddspringbootorderinsideout.order.store.exception;
 
 public class NoSuchOrderException extends RuntimeException {
 

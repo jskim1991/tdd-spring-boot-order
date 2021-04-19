@@ -1,6 +1,6 @@
-package io.jay.tddspringbootorderinsideout.store;
+package io.jay.tddspringbootorderinsideout.order.store;
 
-import io.jay.tddspringbootorderinsideout.domain.Order;
+import io.jay.tddspringbootorderinsideout.order.domain.Order;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public interface OrderStore {
 
     Order addOrder(Order order);
 
-    Order updateOrder(String id, NameValueList nameValueList);
+    Order updateOrder(Order order);
 
     void deleteOrder(String id);
 }

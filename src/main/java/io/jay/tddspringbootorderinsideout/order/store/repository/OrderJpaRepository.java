@@ -1,4 +1,4 @@
-package io.jay.tddspringbootorderinsideout.store.repository;
+package io.jay.tddspringbootorderinsideout.order.store.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

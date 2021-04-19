@@ -1,13 +1,14 @@
-package io.jay.tddspringbootorderinsideout.tests.store;
+package io.jay.tddspringbootorderinsideout.order.tests.store;
 
-import io.jay.tddspringbootorderinsideout.domain.Order;
+import io.jay.tddspringbootorderinsideout.order.domain.Order;
 import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
-import io.jay.tddspringbootorderinsideout.store.OrderJpaStore;
-import io.jay.tddspringbootorderinsideout.store.OrderStore;
-import io.jay.tddspringbootorderinsideout.store.exception.NoSuchOrderException;
-import io.jay.tddspringbootorderinsideout.store.repository.OrderEntity;
-import io.jay.tddspringbootorderinsideout.tests.doubles.repository.FakeOrderJpaRepository;
+import io.jay.tddspringbootorderinsideout.order.store.OrderJpaStore;
+import io.jay.tddspringbootorderinsideout.order.store.OrderStore;
+import io.jay.tddspringbootorderinsideout.order.store.exception.NoSuchOrderException;
+import io.jay.tddspringbootorderinsideout.order.store.repository.OrderEntity;
+import io.jay.tddspringbootorderinsideout.order.tests.doubles.repository.FakeOrderJpaRepository;
+import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -86,21 +87,13 @@ public class OrderStoreTests {
     @Test
     void test_updateOrder_returnsOrder() {
         fakeOrderJpaRepository.save(new OrderEntity("123", 100));
-        NameValueList nameValueList = new NameValueList();
-        nameValueList.add(new NameValue("price", "110"));
 
-        Order order = orderStore.updateOrder("123", nameValueList);
+
+        Order order = orderStore.updateOrder(new Order("123", 110));
 
 
         assertThat(order.getId(), equalTo("123"));
         assertThat(order.getPrice(), equalTo(110));
-    }
-
-    @Test
-    void test_updateOrderWhenEmpty_throwsException() {
-        NoSuchOrderException thrown = assertThrows(NoSuchOrderException.class,
-                () -> orderStore.updateOrder("999", new NameValueList()));
-        assertThat(thrown.getMessage(), equalTo("No such order for id 999"));
     }
 
     @Test
@@ -112,12 +105,5 @@ public class OrderStoreTests {
 
 
         assertThat(orderStore.getAllOrders().isEmpty(), equalTo(true));
-    }
-
-    @Test
-    void test_deleteOrderWhenEmpty_throwsException() {
-        NoSuchOrderException thrown = assertThrows(NoSuchOrderException.class,
-                () -> orderStore.deleteOrder("999"));
-        assertThat(thrown.getMessage(), equalTo("No such order for id 999"));
     }
 }

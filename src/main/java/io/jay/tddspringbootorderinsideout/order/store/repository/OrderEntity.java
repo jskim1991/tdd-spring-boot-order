@@ -1,9 +1,14 @@
-package io.jay.tddspringbootorderinsideout.store.repository;
+package io.jay.tddspringbootorderinsideout.order.store.repository;
 
-import io.jay.tddspringbootorderinsideout.domain.Order;
+import io.jay.tddspringbootorderinsideout.order.domain.Order;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class OrderEntity {
 
+    @Id
     private String id;
     private Integer price;
 
@@ -15,6 +20,10 @@ public class OrderEntity {
     public OrderEntity(Order order) {
         this.id = order.getId();
         this.price = order.getPrice();
+    }
+
+    public OrderEntity() {
+        
     }
 
     public String getId() {

@@ -1,14 +1,16 @@
-package io.jay.tddspringbootorderinsideout.store;
+package io.jay.tddspringbootorderinsideout.order.store;
 
-import io.jay.tddspringbootorderinsideout.domain.Order;
+import io.jay.tddspringbootorderinsideout.order.domain.Order;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
-import io.jay.tddspringbootorderinsideout.store.exception.NoSuchOrderException;
-import io.jay.tddspringbootorderinsideout.store.repository.OrderEntity;
+import io.jay.tddspringbootorderinsideout.order.store.exception.NoSuchOrderException;
+import io.jay.tddspringbootorderinsideout.order.store.repository.OrderEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Repository
 public class OrderJpaStore implements OrderStore {
 
     private JpaRepository<OrderEntity, String> jpaRepository;
@@ -39,15 +41,12 @@ public class OrderJpaStore implements OrderStore {
     }
 
     @Override
-    public Order updateOrder(String id, NameValueList nameValueList) {
-        Order order = getOrder(id);
-        order.setValues(nameValueList);
-        return new Order("123",110);
+    public Order updateOrder(Order order) {
+        return jpaRepository.save(new OrderEntity(order)).toDomain();
     }
 
     @Override
     public void deleteOrder(String id) {
-        getOrder(id);
         jpaRepository.deleteById(id);
     }
 }
