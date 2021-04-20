@@ -1,6 +1,6 @@
 package io.jay.tddspringbootorderinsideout.store;
 
-import io.jay.tddspringbootorderinsideout.user.User;
+import io.jay.tddspringbootorderinsideout.domain.User;
 
 import java.util.List;
 
