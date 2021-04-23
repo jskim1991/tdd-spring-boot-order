@@ -32,7 +32,6 @@ public class UserEntityTests {
     @BeforeEach
     void setup() {
         UserEntity userEntity = new UserEntity.UserEntityBuilder()
-                .id(userId)
                 .name("Jay").build();
 
         userJpaRepository.save(userEntity);

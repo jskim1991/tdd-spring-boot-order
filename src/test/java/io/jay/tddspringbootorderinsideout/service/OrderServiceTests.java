@@ -1,20 +1,19 @@
 package io.jay.tddspringbootorderinsideout.service;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
-import io.jay.tddspringbootorderinsideout.service.OrderLogic;
-import io.jay.tddspringbootorderinsideout.store.OrderJpaStore;
-import io.jay.tddspringbootorderinsideout.store.OrderStore;
-import io.jay.tddspringbootorderinsideout.store.exception.NoSuchOrderException;
 import io.jay.tddspringbootorderinsideout.doubles.FakeOrderJpaRepository;
 import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
+import io.jay.tddspringbootorderinsideout.store.OrderJpaStore;
+import io.jay.tddspringbootorderinsideout.store.OrderStore;
+import io.jay.tddspringbootorderinsideout.store.exception.NoSuchOrderException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OrderServiceTests {
@@ -59,6 +58,15 @@ public class OrderServiceTests {
     void test_getOrderWhenEmpty_throwsException() {
         assertThrows(NoSuchOrderException.class,
                 () -> orderLogic.getOrder("999"));
+    }
+
+    @Test
+    void test_addOrder_returnsOrder() {
+        Order order = orderLogic.addOrder(Order.builder().price(100).build());
+
+
+        assertThat(order.getId(), notNullValue());
+        assertThat(order.getPrice(), equalTo(100));
     }
 
     @Test

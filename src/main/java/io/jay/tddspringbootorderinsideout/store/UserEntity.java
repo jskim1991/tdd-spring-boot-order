@@ -10,6 +10,7 @@ import org.springframework.beans.BeanUtils;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity(name = "users")
 @Table(name = "TB_USER")
@@ -34,8 +35,8 @@ public class UserEntity {
     }
 
     @Builder
-    public UserEntity(String id, String name, String email, String phone, String password) {
-        this.id = id;
+    public UserEntity(String name, String email, String phone, String password) {
+        this();
         this.name = name;
         this.email = email;
         this.phone = phone;

@@ -13,4 +13,6 @@ public interface OrderService {
     Order updateOrder(String id, NameValueList nameValueList);
 
     void deleteOrder(String id);
+
+    Order addOrder(Order build);
 }

@@ -5,12 +5,10 @@ import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class User {
 
     private String id;
@@ -19,6 +17,20 @@ public class User {
     private String phone;
     private String password;
     private List<Order> orders;
+
+    public User() {
+        this.id = UUID.randomUUID().toString();
+    }
+
+    @Builder
+    public User(String name, String email, String phone, String password, List<Order> orders) {
+        this();
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+        this.orders = orders;
+    }
 
     public void setValues(NameValueList nameValueList) {
         for (NameValue nameValue : nameValueList.getNameValues()) {

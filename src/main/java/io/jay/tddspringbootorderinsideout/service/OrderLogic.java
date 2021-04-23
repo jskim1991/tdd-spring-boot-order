@@ -3,9 +3,11 @@ package io.jay.tddspringbootorderinsideout.service;
 import io.jay.tddspringbootorderinsideout.domain.Order;
 import io.jay.tddspringbootorderinsideout.store.OrderStore;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class OrderLogic implements OrderService {
 
     private OrderStore orderStore;
@@ -35,5 +37,10 @@ public class OrderLogic implements OrderService {
     public void deleteOrder(String id) {
         orderStore.getOrder(id);
         orderStore.deleteOrder(id);
+    }
+
+    @Override
+    public Order addOrder(Order order) {
+        return orderStore.addOrder(order);
     }
 }

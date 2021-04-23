@@ -11,10 +11,12 @@ import io.jay.tddspringbootorderinsideout.doubles.FakeUserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceTests {
@@ -26,8 +28,8 @@ public class UserServiceTests {
 
     @BeforeEach
     void setUp() {
-        john = User.builder().id("111").name("John").build();
-        sam = User.builder().id("222").name("Sam").build();
+        john = User.builder().name("John").build();
+        sam = User.builder().name("Sam").build();
 
         userStore = new UserJpaStore(new FakeUserJpaRepository());
         userLogic = new UserLogic(userStore);
@@ -42,21 +44,21 @@ public class UserServiceTests {
         List<User> users = userLogic.getAll();
 
 
-        assertThat(users.get(0).getId(), equalTo("111"));
-        assertThat(users.get(0).getName(), equalTo("John"));
-        assertThat(users.get(1).getId(), equalTo("222"));
-        assertThat(users.get(1).getName(), equalTo("Sam"));
+        assertThat(users.size(), equalTo(2));
+        List<String> usernames = users.stream().map(User::getName).collect(Collectors.toList());
+        assertThat(usernames.contains("John"), equalTo(true));
+        assertThat(usernames.contains("Sam"), equalTo(true));
     }
 
     @Test
     void test_getUser_returnsUser() {
-        userStore.addUser(john);
+        User savedUser = userStore.addUser(john);
 
 
-        User user = userLogic.get("111");
+        User user = userLogic.get(savedUser.getId());
 
 
-        assertThat(user.getId(), equalTo("111"));
+        assertThat(user.getId(), notNullValue());
         assertThat(user.getName(), equalTo("John"));
     }
 
@@ -67,21 +69,22 @@ public class UserServiceTests {
 
     @Test
     void test_addUser_returnsUser() {
-        User saved = userLogic.add(john);
+        User saved = userLogic.add(User.builder().name("John").build());
 
 
-        assertThat(saved.getId(), equalTo("111"));
+        assertThat(saved.getId(), notNullValue());
         assertThat(saved.getName(), equalTo("John"));
     }
 
     @Test
     void test_updateUser_returnsUpdatedUser() {
-        userStore.addUser(john);
+        User savedUser = userStore.addUser(john);
+        String id = savedUser.getId();
         NameValueList nameValueList = new NameValueList();
         nameValueList.add(new NameValue("phone", "010-1234-5678"));
 
 
-        User updatedUser = userLogic.update("111", nameValueList);
+        User updatedUser = userLogic.update(id, nameValueList);
 
 
         assertThat(updatedUser.getPhone(), equalTo("010-1234-5678"));
@@ -94,10 +97,10 @@ public class UserServiceTests {
 
     @Test
     void test_deleteUser_deletesUser() {
-        userStore.addUser(john);
+        User savedUser = userStore.addUser(john);
+        String id = savedUser.getId();
 
-
-        userLogic.delete("111");
+        userLogic.delete(id);
 
 
         assertThat(userLogic.getAll().isEmpty(), equalTo(true));
