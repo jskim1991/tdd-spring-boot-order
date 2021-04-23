@@ -9,3 +9,6 @@ travis-tests:
 
 travis-integrationtests:
 	@/usr/bin/time ./gradlew clean integrationTest
+
+all:
+	@/usr/bin/time ./gradlew clean build test integrationTest

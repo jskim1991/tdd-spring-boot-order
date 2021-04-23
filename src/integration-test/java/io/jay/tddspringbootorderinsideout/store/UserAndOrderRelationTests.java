@@ -1,5 +1,7 @@
 package io.jay.tddspringbootorderinsideout.store;
 
+import io.jay.tddspringbootorderinsideout.domain.Order;
+import io.jay.tddspringbootorderinsideout.domain.User;
 import io.jay.tddspringbootorderinsideout.store.jpa.OrderJpaRepository;
 import io.jay.tddspringbootorderinsideout.store.jpa.UserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,13 +12,12 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @DataJpaTest
-public class UserEntityTests {
+public class UserAndOrderRelationTests {
 
     @Autowired
     private UserJpaRepository userJpaRepository;
@@ -31,19 +32,14 @@ public class UserEntityTests {
 
     @BeforeEach
     void setup() {
-        UserEntity userEntity = UserEntity.builder()
-                .name("Jay").build();
+        UserEntity userEntity = new UserEntity(User.builder().name("Jay").build());
 
         UserEntity savedUserEntity = userJpaRepository.save(userEntity);
         userId = savedUserEntity.getId();
 
         List<OrderEntity> orderEntities = new ArrayList<>();
-        orderEntities.add(OrderEntity.builder()
-                .userEntity(userEntity)
-                .price(100).build());
-        orderEntities.add(OrderEntity.builder()
-                .userEntity(userEntity)
-                .price(200).build());
+        orderEntities.add(new OrderEntity(Order.builder().user(userEntity.toDomain()).price(100).build()));
+        orderEntities.add(new OrderEntity(Order.builder().user(userEntity.toDomain()).price(200).build()));
 
         orderJpaRepository.saveAll(orderEntities);
 

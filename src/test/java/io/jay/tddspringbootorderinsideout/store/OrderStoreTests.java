@@ -25,7 +25,7 @@ public class OrderStoreTests {
 
     @Test
     void test_getAllOrders_returnsListOfOrders() {
-        OrderEntity savedEntity = fakeOrderJpaRepository.save(OrderEntity.builder().price(100).build());
+        OrderEntity savedEntity = fakeOrderJpaRepository.save(new OrderEntity(Order.builder().price(100).build()));
 
 
         List<Order> orders = orderStore.getAllOrders();
@@ -42,7 +42,7 @@ public class OrderStoreTests {
 
     @Test
     void test_getOrder_returnsOrder() {
-        OrderEntity savedEntity = fakeOrderJpaRepository.save(OrderEntity.builder().price(100).build());
+        OrderEntity savedEntity = fakeOrderJpaRepository.save(new OrderEntity(Order.builder().price(100).build()));
 
 
         Order order = orderStore.getOrder(savedEntity.getId());
@@ -80,7 +80,7 @@ public class OrderStoreTests {
 
     @Test
     void test_updateOrder_returnsOrder() {
-        OrderEntity savedEntity = fakeOrderJpaRepository.save(OrderEntity.builder().price(100).build());
+        OrderEntity savedEntity = fakeOrderJpaRepository.save(new OrderEntity(Order.builder().price(100).build()));
         Order updateOrder = savedEntity.toDomain();
         updateOrder.setPrice(110);
 
@@ -94,7 +94,7 @@ public class OrderStoreTests {
 
     @Test
     void test_deleteOrder_deletesOrderFromDB() {
-        OrderEntity savedEntity = fakeOrderJpaRepository.save(OrderEntity.builder().price(100).build());
+        OrderEntity savedEntity = fakeOrderJpaRepository.save(new OrderEntity(Order.builder().price(100).build()));
 
 
         orderStore.deleteOrder(savedEntity.getId());

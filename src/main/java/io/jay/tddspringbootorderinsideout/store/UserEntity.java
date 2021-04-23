@@ -1,9 +1,7 @@
 package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.domain.User;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
@@ -35,15 +33,6 @@ public class UserEntity {
 
     public UserEntity() {
         this.id = UUID.randomUUID().toString();
-    }
-
-    @Builder
-    public UserEntity(String name, String email, String phone, String password) {
-        this();
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
     }
 
     public User toDomain() {
