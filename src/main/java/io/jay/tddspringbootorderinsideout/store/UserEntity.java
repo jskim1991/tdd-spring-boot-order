@@ -16,7 +16,6 @@ import java.util.UUID;
 @Table(name = "TB_USER")
 @Getter
 @Setter
-@NoArgsConstructor
 public class UserEntity {
 
     @Id
@@ -32,6 +31,10 @@ public class UserEntity {
 
     public UserEntity(User user) {
         BeanUtils.copyProperties(user, this);
+    }
+
+    public UserEntity() {
+        this.id = UUID.randomUUID().toString();
     }
 
     @Builder

@@ -29,28 +29,25 @@ public class OrderServiceTests {
 
     @Test
     void test_getAllOrders_returnsList() {
-        orderStore.addOrder(new Order("123", 100));
-        orderStore.addOrder(new Order("222", 200));
+        orderStore.addOrder(Order.builder().price(100).build());
+        orderStore.addOrder(Order.builder().price(200).build());
 
 
         List<Order> orders = orderLogic.getAll();
 
 
-        assertThat(orders.get(0).getId(), equalTo("123"));
-        assertThat(orders.get(0).getPrice(), equalTo(100));
-        assertThat(orders.get(1).getId(), equalTo("222"));
-        assertThat(orders.get(1).getPrice(), equalTo(200));
+        assertThat(orders.size(), equalTo(2));
     }
 
     @Test
     void test_getOrder_returnsOrder() {
-        orderStore.addOrder(new Order("111", 100));
+        Order savedOrder = orderStore.addOrder(Order.builder().price(100).build());
 
 
-        Order order = orderLogic.getOrder("111");
+        Order order = orderLogic.getOrder(savedOrder.getId());
 
 
-        assertThat(order.getId(), equalTo("111"));
+        assertThat(order.getId(), equalTo(savedOrder.getId()));
         assertThat(order.getPrice(), equalTo(100));
     }
 
@@ -71,14 +68,14 @@ public class OrderServiceTests {
 
     @Test
     void test_updateOrder_returnsUpdatedOrder() {
-        orderStore.addOrder(new Order("111", 100));
+        Order savedOrder = orderStore.addOrder(Order.builder().build());
         NameValueList nameValueList = new NameValueList();
         nameValueList.add(new NameValue("price", "500"));
 
-        Order updatedOrder = orderLogic.updateOrder("111", nameValueList);
+        Order updatedOrder = orderLogic.updateOrder(savedOrder.getId(), nameValueList);
 
 
-        assertThat(updatedOrder.getId(), equalTo("111"));
+        assertThat(updatedOrder.getId(), equalTo(savedOrder.getId()));
         assertThat(updatedOrder.getPrice(), equalTo(500));
     }
 
@@ -90,10 +87,10 @@ public class OrderServiceTests {
 
     @Test
     void test_deleteOrder_deletesOrder() {
-        orderStore.addOrder(new Order("111", 100));
+        Order order = orderStore.addOrder(Order.builder().build());
 
 
-        orderLogic.deleteOrder("111");
+        orderLogic.deleteOrder(order.getId());
 
 
         assertThat(orderLogic.getAll().isEmpty(), equalTo(true));

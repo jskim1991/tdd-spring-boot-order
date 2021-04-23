@@ -30,14 +30,9 @@ public class OrderEntity {
         this.id = UUID.randomUUID().toString();
     }
 
-    public OrderEntity(String id, Integer price) {
-        this.id = id;
-        this.price = price;
-    }
-
     @Builder
-    public OrderEntity(String id, Timestamp creationTimestamp, Integer price, UserEntity userEntity) {
-        this.id = id;
+    public OrderEntity(Timestamp creationTimestamp, Integer price, UserEntity userEntity) {
+        this();
         this.creationTimestamp = creationTimestamp;
         this.price = price;
         this.userEntity = userEntity;
@@ -48,6 +43,8 @@ public class OrderEntity {
     }
 
     public Order toDomain() {
-        return new Order(this.id, this.price);
+        Order order = new Order();
+        BeanUtils.copyProperties(this, order);
+        return order;
     }
 }

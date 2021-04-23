@@ -29,11 +29,6 @@ public class Order {
         this.user = user;
     }
 
-    public Order(String id, int price) {
-        this.id = id;
-        this.price = price;
-    }
-
     public void setValues(NameValueList nameValueList) {
         for (NameValue nameValue : nameValueList.getNameValues()) {
             String name = nameValue.getName();

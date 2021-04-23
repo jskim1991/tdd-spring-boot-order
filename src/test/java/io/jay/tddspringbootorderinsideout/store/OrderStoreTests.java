@@ -25,13 +25,13 @@ public class OrderStoreTests {
 
     @Test
     void test_getAllOrders_returnsListOfOrders() {
-        fakeOrderJpaRepository.save(new OrderEntity("123", 100));
+        OrderEntity savedEntity = fakeOrderJpaRepository.save(OrderEntity.builder().price(100).build());
 
 
         List<Order> orders = orderStore.getAllOrders();
 
 
-        assertThat(orders.get(0).getId(), equalTo("123"));
+        assertThat(orders.get(0).getId(), equalTo(savedEntity.getId()));
         assertThat(orders.get(0).getPrice(), equalTo(100));
     }
 
@@ -42,13 +42,13 @@ public class OrderStoreTests {
 
     @Test
     void test_getOrder_returnsOrder() {
-        fakeOrderJpaRepository.save(new OrderEntity("123", 100));
+        OrderEntity savedEntity = fakeOrderJpaRepository.save(OrderEntity.builder().price(100).build());
 
 
-        Order order = orderStore.getOrder("123");
+        Order order = orderStore.getOrder(savedEntity.getId());
 
 
-        assertThat(order.getId(), equalTo("123"));
+        assertThat(order.getId(), equalTo(savedEntity.getId()));
         assertThat(order.getPrice(), equalTo(100));
     }
 
@@ -61,41 +61,43 @@ public class OrderStoreTests {
 
     @Test
     void test_addOrder_returnsOrder() {
-        Order order = orderStore.addOrder(new Order("123", 100));
+        Order order = orderStore.addOrder(Order.builder().price(100).build());
 
 
-        assertThat(order.getId(), equalTo("123"));
+        assertThat(order.getId(), equalTo(order.getId()));
         assertThat(order.getPrice(), equalTo(100));
     }
 
     @Test
     void test_addOrder_persistsToDB() {
-        orderStore.addOrder(new Order("123", 100));
+        Order savedOrder = orderStore.addOrder(Order.builder().price(100).build());
 
 
         Order order = orderStore.getAllOrders().get(0);
-        assertThat(order.getId(), equalTo("123"));
+        assertThat(order.getId(), equalTo(savedOrder.getId()));
         assertThat(order.getPrice(), equalTo(100));
     }
 
     @Test
     void test_updateOrder_returnsOrder() {
-        fakeOrderJpaRepository.save(new OrderEntity("123", 100));
+        OrderEntity savedEntity = fakeOrderJpaRepository.save(OrderEntity.builder().price(100).build());
+        Order updateOrder = savedEntity.toDomain();
+        updateOrder.setPrice(110);
 
 
-        Order order = orderStore.updateOrder(new Order("123", 110));
+        Order order = orderStore.updateOrder(updateOrder);
 
 
-        assertThat(order.getId(), equalTo("123"));
+        assertThat(order.getId(), equalTo(updateOrder.getId()));
         assertThat(order.getPrice(), equalTo(110));
     }
 
     @Test
     void test_deleteOrder_deletesOrderFromDB() {
-        fakeOrderJpaRepository.save(new OrderEntity("123", 100));
+        OrderEntity savedEntity = fakeOrderJpaRepository.save(OrderEntity.builder().price(100).build());
 
 
-        orderStore.deleteOrder("123");
+        orderStore.deleteOrder(savedEntity.getId());
 
 
         assertThat(orderStore.getAllOrders().isEmpty(), equalTo(true));

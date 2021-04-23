@@ -27,22 +27,21 @@ public class UserEntityTests {
     @Autowired
     private TestEntityManager em;
 
-    private String userId = UUID.randomUUID().toString();
+    private String userId = null;
 
     @BeforeEach
     void setup() {
-        UserEntity userEntity = new UserEntity.UserEntityBuilder()
+        UserEntity userEntity = UserEntity.builder()
                 .name("Jay").build();
 
-        userJpaRepository.save(userEntity);
+        UserEntity savedUserEntity = userJpaRepository.save(userEntity);
+        userId = savedUserEntity.getId();
 
         List<OrderEntity> orderEntities = new ArrayList<>();
-        orderEntities.add(new OrderEntity.OrderEntityBuilder()
-                .id(UUID.randomUUID().toString())
+        orderEntities.add(OrderEntity.builder()
                 .userEntity(userEntity)
                 .price(100).build());
-        orderEntities.add(new OrderEntity.OrderEntityBuilder()
-                .id(UUID.randomUUID().toString())
+        orderEntities.add(OrderEntity.builder()
                 .userEntity(userEntity)
                 .price(200).build());
 
