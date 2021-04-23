@@ -3,9 +3,15 @@ package io.jay.tddspringbootorderinsideout.domain;
 import io.jay.tddspringbootorderinsideout.share.JsonUtil;
 import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
+import lombok.*;
 
 import java.sql.Timestamp;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Order {
 
     private String id;
@@ -33,21 +39,5 @@ public class Order {
                     throw new IllegalArgumentException("No such field " + name);
             }
         }
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public Timestamp getCreationTimestamp() {
-        return this.creationTimestamp;
-    }
-
-    public Integer getPrice() {
-        return this.price;
-    }
-
-    public User getUser() {
-        return this.user;
     }
 }

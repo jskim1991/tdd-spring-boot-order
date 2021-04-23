@@ -26,11 +26,11 @@ public class UserStoreTests {
 
     @BeforeEach
     void setUp() {
-        john = new User.UserBuilder().id("111").name("John").build();
+        john = User.builder().id("111").name("John").build();
         johnEntity = new UserEntity.UserEntityBuilder().id(john.getId()).name(john.getName()).build();
 
 
-        sam = new User.UserBuilder().id("222").name("Sam").build();
+        sam = User.builder().id("222").name("Sam").build();
         samEntity = new UserEntity.UserEntityBuilder().id(sam.getId()).name(sam.getName()).build();
 
         fakeUserJpaRepository = new FakeUserJpaRepository();

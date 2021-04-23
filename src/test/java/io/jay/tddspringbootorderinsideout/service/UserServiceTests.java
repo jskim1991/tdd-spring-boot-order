@@ -26,8 +26,8 @@ public class UserServiceTests {
 
     @BeforeEach
     void setUp() {
-        john = new User.UserBuilder().id("111").name("John").build();
-        sam = new User.UserBuilder().id("222").name("Sam").build();
+        john = User.builder().id("111").name("John").build();
+        sam = User.builder().id("222").name("Sam").build();
 
         userStore = new UserJpaStore(new FakeUserJpaRepository());
         userLogic = new UserLogic(userStore);
