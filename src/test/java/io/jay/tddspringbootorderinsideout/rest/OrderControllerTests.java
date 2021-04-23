@@ -63,7 +63,7 @@ public class OrderControllerTests {
                 .thenReturn(Order.builder().price(100).build());
 
 
-        mockMvc.perform(get("/1"))
+        mockMvc.perform(get("/orders/1"))
                 .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.price", equalTo(100)))
         ;
@@ -74,7 +74,7 @@ public class OrderControllerTests {
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
 
 
-        mockMvc.perform(get("/999"));
+        mockMvc.perform(get("/orders/999"));
 
 
         verify(orderService, times(1)).getOrder(argumentCaptor.capture());

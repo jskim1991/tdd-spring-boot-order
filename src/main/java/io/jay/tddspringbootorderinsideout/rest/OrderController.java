@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("")
+@CrossOrigin(value = "*")
 public class OrderController {
 
     private OrderService orderService;
@@ -23,7 +24,7 @@ public class OrderController {
         return orderService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/orders/{id}")
     public Order getOrder(@PathVariable String id) {
         return orderService.getOrder(id);
     }
