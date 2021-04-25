@@ -3,9 +3,11 @@ package io.jay.tddspringbootorderinsideout.service;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.store.UserStore;
 import io.jay.tddspringbootorderinsideout.domain.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserLogic implements UserService {
 
     private UserStore userStore;

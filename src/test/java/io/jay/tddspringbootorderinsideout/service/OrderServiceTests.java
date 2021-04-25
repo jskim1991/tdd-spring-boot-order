@@ -1,7 +1,7 @@
 package io.jay.tddspringbootorderinsideout.service;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
-import io.jay.tddspringbootorderinsideout.doubles.FakeOrderJpaRepository;
+import io.jay.tddspringbootorderinsideout.store.doubles.FakeOrderJpaRepository;
 import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.store.OrderJpaStore;

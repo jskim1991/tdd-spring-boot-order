@@ -1,6 +1,7 @@
-package io.jay.tddspringbootorderinsideout.doubles;
+package io.jay.tddspringbootorderinsideout.store.doubles;
 
 import io.jay.tddspringbootorderinsideout.store.UserEntity;
+import io.jay.tddspringbootorderinsideout.store.jpa.UserJpaRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-public class FakeUserJpaRepository implements JpaRepository<UserEntity, String> {
+public class FakeUserJpaRepository implements UserJpaRepository {
 
     private HashMap<String, UserEntity> userMap;
 

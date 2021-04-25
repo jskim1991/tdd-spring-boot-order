@@ -5,13 +5,11 @@ import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.store.UserJpaStore;
 import io.jay.tddspringbootorderinsideout.store.UserStore;
-import io.jay.tddspringbootorderinsideout.service.UserLogic;
 import io.jay.tddspringbootorderinsideout.store.exception.NoSuchUserException;
-import io.jay.tddspringbootorderinsideout.doubles.FakeUserJpaRepository;
+import io.jay.tddspringbootorderinsideout.store.doubles.FakeUserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

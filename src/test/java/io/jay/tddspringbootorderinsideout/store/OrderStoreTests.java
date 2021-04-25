@@ -1,7 +1,7 @@
 package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
-import io.jay.tddspringbootorderinsideout.doubles.FakeOrderJpaRepository;
+import io.jay.tddspringbootorderinsideout.store.doubles.FakeOrderJpaRepository;
 import io.jay.tddspringbootorderinsideout.store.exception.NoSuchOrderException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

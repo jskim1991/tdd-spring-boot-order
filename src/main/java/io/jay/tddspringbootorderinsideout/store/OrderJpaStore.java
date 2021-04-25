@@ -2,6 +2,7 @@ package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
 import io.jay.tddspringbootorderinsideout.store.exception.NoSuchOrderException;
+import io.jay.tddspringbootorderinsideout.store.jpa.OrderJpaRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,12 +12,11 @@ import java.util.stream.Collectors;
 @Repository
 public class OrderJpaStore implements OrderStore {
 
-    private JpaRepository<OrderEntity, String> jpaRepository;
+    private OrderJpaRepository jpaRepository;
 
-    public OrderJpaStore(JpaRepository<OrderEntity, String> jpaRepository) {
+    public OrderJpaStore(OrderJpaRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
     }
-
 
     @Override
     public List<Order> getAllOrders() {
