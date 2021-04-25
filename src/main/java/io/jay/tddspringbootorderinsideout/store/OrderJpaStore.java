@@ -1,9 +1,9 @@
 package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
+import io.jay.tddspringbootorderinsideout.store.entity.OrderEntity;
 import io.jay.tddspringbootorderinsideout.store.exception.NoSuchOrderException;
 import io.jay.tddspringbootorderinsideout.store.jpa.OrderJpaRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

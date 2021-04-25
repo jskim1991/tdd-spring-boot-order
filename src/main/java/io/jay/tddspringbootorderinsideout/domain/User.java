@@ -4,6 +4,7 @@ import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class User {
 
     public User() {
         this.id = UUID.randomUUID().toString();
+        this.orders = new ArrayList<>();
     }
 
     @Builder

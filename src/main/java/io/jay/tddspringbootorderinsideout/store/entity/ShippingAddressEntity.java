@@ -1,4 +1,4 @@
-package io.jay.tddspringbootorderinsideout.store;
+package io.jay.tddspringbootorderinsideout.store.entity;
 
 import io.jay.tddspringbootorderinsideout.domain.ShippingAddress;
 import lombok.Getter;

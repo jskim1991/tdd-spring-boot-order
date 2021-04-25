@@ -1,6 +1,6 @@
 package io.jay.tddspringbootorderinsideout.store.doubles;
 
-import io.jay.tddspringbootorderinsideout.store.OrderEntity;
+import io.jay.tddspringbootorderinsideout.store.entity.OrderEntity;
 import io.jay.tddspringbootorderinsideout.store.jpa.OrderJpaRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;

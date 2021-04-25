@@ -1,9 +1,9 @@
 package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.domain.User;
+import io.jay.tddspringbootorderinsideout.store.entity.UserEntity;
 import io.jay.tddspringbootorderinsideout.store.exception.NoSuchUserException;
 import io.jay.tddspringbootorderinsideout.store.jpa.UserJpaRepository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

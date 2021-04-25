@@ -1,6 +1,8 @@
 package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.domain.ShippingAddress;
+import io.jay.tddspringbootorderinsideout.store.entity.ShippingAddressEntity;
+import io.jay.tddspringbootorderinsideout.store.jpa.ShippingJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

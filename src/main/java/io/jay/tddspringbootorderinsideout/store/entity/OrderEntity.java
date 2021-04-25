@@ -1,9 +1,8 @@
-package io.jay.tddspringbootorderinsideout.store;
+package io.jay.tddspringbootorderinsideout.store.entity;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
-import lombok.Builder;
+import io.jay.tddspringbootorderinsideout.domain.User;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 
@@ -41,7 +40,9 @@ public class OrderEntity {
         Order order = new Order();
         BeanUtils.copyProperties(this, order);
         if (this.userEntity != null) {
-            order.setUser(this.userEntity.toDomain());
+            User user = new User();
+            BeanUtils.copyProperties(this.userEntity, user);
+            order.setUser(user);
         }
         return order;
     }

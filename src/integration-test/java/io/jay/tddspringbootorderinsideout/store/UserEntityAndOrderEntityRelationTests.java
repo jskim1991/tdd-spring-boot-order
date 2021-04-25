@@ -2,6 +2,8 @@ package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
 import io.jay.tddspringbootorderinsideout.domain.User;
+import io.jay.tddspringbootorderinsideout.store.entity.OrderEntity;
+import io.jay.tddspringbootorderinsideout.store.entity.UserEntity;
 import io.jay.tddspringbootorderinsideout.store.jpa.OrderJpaRepository;
 import io.jay.tddspringbootorderinsideout.store.jpa.UserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @DataJpaTest
-public class UserAndOrderRelationTests {
+public class UserEntityAndOrderEntityRelationTests {
 
     @Autowired
     private UserJpaRepository userJpaRepository;
