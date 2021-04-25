@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -66,6 +67,7 @@ public class UserAndOrderRelationTests {
 
         User returnedUser = JsonUtil.fromJson(json, User.class);
         assertThat(returnedUser.getOrders().size(), equalTo(2));
+        assertThat(returnedUser.getOrders().get(0).getUser(), nullValue());
     }
 
     @Test
