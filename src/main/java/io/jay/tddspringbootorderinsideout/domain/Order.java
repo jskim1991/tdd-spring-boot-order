@@ -6,6 +6,8 @@ import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -16,9 +18,11 @@ public class Order {
     private Timestamp creationTimestamp;
     private Integer price;
     private User user;
+    private List<String> items;
 
     public Order() {
         this.id = UUID.randomUUID().toString();
+        this.items = new ArrayList<>();
     }
 
     @Builder
