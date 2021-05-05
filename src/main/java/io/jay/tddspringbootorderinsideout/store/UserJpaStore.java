@@ -50,6 +50,7 @@ public class UserJpaStore implements UserStore {
 
     @Override
     public User getUserByEmail(String email) {
-        return jpaRepository.findByEmail(email).get().toDomain();
+        return jpaRepository.findByEmail(email).orElseThrow(() ->
+                new RuntimeException("Invalid username or password")).toDomain();
     }
 }

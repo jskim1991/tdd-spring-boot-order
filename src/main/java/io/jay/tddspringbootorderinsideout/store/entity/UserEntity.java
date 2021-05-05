@@ -2,6 +2,7 @@ package io.jay.tddspringbootorderinsideout.store.entity;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
 import io.jay.tddspringbootorderinsideout.domain.User;
+import io.jay.tddspringbootorderinsideout.domain.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
@@ -25,6 +26,9 @@ public class UserEntity {
     private String phone;
     private String password;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<UserRole> roles;
+
     @OneToMany(mappedBy = "userEntity", orphanRemoval = true)
     private List<OrderEntity> orders = new ArrayList<>();
 
@@ -34,6 +38,7 @@ public class UserEntity {
 
     public UserEntity() {
         this.id = UUID.randomUUID().toString();
+        this.roles = new ArrayList<>();
     }
 
     public User toDomain() {

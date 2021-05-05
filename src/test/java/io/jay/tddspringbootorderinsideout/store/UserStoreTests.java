@@ -116,4 +116,16 @@ public class UserStoreTests {
 
         assertThat(actualUser.getEmail(), equalTo("john@email.com"));
     }
+
+    @Test
+    void test_getUserWithWrongEmail_throwsException() {
+        fakeUserJpaRepository.save(johnEntity);
+
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                userStore.getUserByEmail("some-other-email@email.com"));
+
+
+        assertThat(exception.getMessage(), equalTo("Invalid username or password"));
+    }
 }

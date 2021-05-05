@@ -2,26 +2,32 @@ package io.jay.tddspringbootorderinsideout;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jay.tddspringbootorderinsideout.domain.User;
+import io.jay.tddspringbootorderinsideout.domain.UserRole;
 import io.jay.tddspringbootorderinsideout.rest.dto.LoginRequestDto;
+import io.jay.tddspringbootorderinsideout.rest.dto.SignupRequestDto;
 import io.jay.tddspringbootorderinsideout.store.UserStore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
+
+import javax.transaction.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext
 public class EndpointAccessTests {
 
     @Autowired
@@ -30,13 +36,18 @@ public class EndpointAccessTests {
     @Autowired
     private UserStore userStore;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private ObjectMapper mapper = new ObjectMapper();
 
     @Test
+    @Transactional
     void test_login_isAccessible() throws Exception {
+
         userStore.addUser(User.builder()
                 .email("user@email.com")
-                .password("password")
+                .password(passwordEncoder.encode("password"))
                 .build());
 
         mockMvc.perform(post("/login")
@@ -47,7 +58,23 @@ public class EndpointAccessTests {
                                 .build()
                 ))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @Test
+    @Transactional
+    void test_signup_isAccessible() throws Exception {
+        mockMvc.perform(post("/signup")
+                .content(mapper.writeValueAsString(
+                        SignupRequestDto.builder()
+                                .email("user@email.com")
+                                .password("password")
+                                .build()
+                ))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+        ;
     }
 
     @Test

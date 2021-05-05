@@ -8,6 +8,9 @@ import java.util.List;
 public class SpyStubUserStore implements UserStore {
     private String login_argument_email;
     private User getUserByEmail_return_value;
+    private User addUser_return_value;
+    private String signup_argument_email;
+    private String signup_argument_password;
 
     @Override
     public List<User> getAllUsers() {
@@ -21,7 +24,9 @@ public class SpyStubUserStore implements UserStore {
 
     @Override
     public User addUser(User user) {
-        return null;
+        signup_argument_email = user.getEmail();
+        signup_argument_password = user.getPassword();
+        return addUser_return_value;
     }
 
     @Override
@@ -46,5 +51,18 @@ public class SpyStubUserStore implements UserStore {
 
     public void setGetUserByEmail_return_value(User getUserByEmail_return_value) {
         this.getUserByEmail_return_value = getUserByEmail_return_value;
+    }
+
+
+    public void setAddUser_return_value(User addUser_return_value) {
+        this.addUser_return_value = addUser_return_value;
+    }
+
+    public String getSignup_argument_email() {
+        return signup_argument_email;
+    }
+
+    public String getSignup_argument_password() {
+        return signup_argument_password;
     }
 }
