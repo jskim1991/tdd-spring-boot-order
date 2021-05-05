@@ -29,7 +29,7 @@ public class UserStoreTests {
 
     @BeforeEach
     void setUp() {
-        john = User.builder().name("John").build();
+        john = User.builder().name("John").email("john@email.com").build();
         johnEntity = new UserEntity(john);
 
 
@@ -104,5 +104,16 @@ public class UserStoreTests {
 
 
         assertThat(userStore.getAllUsers().isEmpty(), equalTo(true));
+    }
+
+    @Test
+    void test_getUserByEmail_returnsUserWithCorrectEmail() {
+        fakeUserJpaRepository.save(johnEntity);
+
+
+        User actualUser = userStore.getUserByEmail("john@email.com");
+
+
+        assertThat(actualUser.getEmail(), equalTo("john@email.com"));
     }
 }

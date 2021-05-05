@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class UserAndOrderRelationTests {
 
     @Autowired
@@ -58,6 +59,7 @@ public class UserAndOrderRelationTests {
     }
 
     @Test
+    @WithMockUser
     void test_getAllUsers_returnsUserWithOrders() throws Exception {
         String json = mockMvc.perform(get("/users/" + user.getId()))
                 .andReturn()
@@ -71,8 +73,9 @@ public class UserAndOrderRelationTests {
     }
 
     @Test
+    @WithMockUser
     void test_getAllOrders_returnsOrdersWithUser() throws Exception {
-        String json = mockMvc.perform(get("/orders/"))
+        String json = mockMvc.perform(get("/orders"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();

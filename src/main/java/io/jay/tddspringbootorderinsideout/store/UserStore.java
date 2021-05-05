@@ -14,4 +14,6 @@ public interface UserStore {
     User updateUser(User user);
 
     void deleteUser(String id);
+
+    User getUserByEmail(String email);
 }

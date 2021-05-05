@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class FakeUserJpaRepository implements UserJpaRepository {
 
@@ -159,5 +156,16 @@ public class FakeUserJpaRepository implements UserJpaRepository {
     @Override
     public <S extends UserEntity> boolean exists(Example<S> example) {
         return false;
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmail(String email) {
+        for (Map.Entry<String, UserEntity> entry : userMap.entrySet()) {
+            UserEntity user = entry.getValue();
+            if (user.getEmail().equals(email)) {
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
     }
 }

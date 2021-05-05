@@ -47,4 +47,9 @@ public class UserJpaStore implements UserStore {
     public void deleteUser(String id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return jpaRepository.findByEmail(email).get().toDomain();
+    }
 }
