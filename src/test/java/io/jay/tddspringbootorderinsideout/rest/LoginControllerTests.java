@@ -1,7 +1,9 @@
 package io.jay.tddspringbootorderinsideout.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jay.tddspringbootorderinsideout.domain.User;
 import io.jay.tddspringbootorderinsideout.rest.dto.LoginRequestDto;
+import io.jay.tddspringbootorderinsideout.util.JwtTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -20,14 +22,19 @@ public class LoginControllerTests {
     private ObjectMapper mapper;
     private MockMvc mockMvc;
     private SpyStubUserStore spyStubUserStore;
+    private SpyStubJwtTokenUtil spyStubjwtTokenUtil;
 
     @BeforeEach
     void setup() {
         mapper = new ObjectMapper();
         spyStubUserStore = new SpyStubUserStore();
+        spyStubjwtTokenUtil = new SpyStubJwtTokenUtil();
         mockMvc = MockMvcBuilders
-                .standaloneSetup(new LoginController(spyStubUserStore))
+                .standaloneSetup(new LoginController(spyStubUserStore, spyStubjwtTokenUtil))
                 .build();
+
+        spyStubjwtTokenUtil.setCreateAccessToken_return_value("some access token");
+        spyStubjwtTokenUtil.setCreateRefreshToken_return_value("some refresh token");
     }
 
     @Test
@@ -58,5 +65,26 @@ public class LoginControllerTests {
                 ))
                 .contentType(MediaType.APPLICATION_JSON));
         assertThat(spyStubUserStore.getLogin_argument_email(), equalTo("user@email.com"));
+    }
+
+    @Test
+    void test_login_usesRetrievedUser() throws Exception {
+        User user = User.builder()
+                .email("user@email.com")
+                .build();
+        spyStubUserStore.setGetUserByEmail_return_value(user);
+
+
+        mockMvc.perform(post("/login")
+                .content(mapper.writeValueAsString(
+                        LoginRequestDto.builder()
+                                .email("user@email.com")
+                                .password("password").build()
+                ))
+                .contentType(MediaType.APPLICATION_JSON));
+
+
+        assertThat(spyStubjwtTokenUtil.getCreateAccessToken_argument_user(),equalTo(user));
+        assertThat(spyStubjwtTokenUtil.getCreateRefreshToken_argument_user(),equalTo(user));
     }
 }

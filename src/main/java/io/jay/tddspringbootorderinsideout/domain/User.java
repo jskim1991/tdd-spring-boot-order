@@ -10,28 +10,25 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
 public class User {
 
-    private String id;
+    @Builder.Default
+    private String id = UUID.randomUUID().toString();
     private String name;
     private String email;
     private String phone;
     private String password;
-    private List<Order> orders;
+    @Builder.Default
+    private List<Order> orders = new ArrayList<>();
+    @Builder.Default
+    private List<UserRole> roles = new ArrayList<>();
 
     public User() {
         this.id = UUID.randomUUID().toString();
         this.orders = new ArrayList<>();
-    }
-
-    @Builder
-    public User(String name, String email, String phone, String password, List<Order> orders) {
-        this();
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-        this.orders = orders;
+        this.roles = new ArrayList<>();
     }
 
     public void setValues(NameValueList nameValueList) {
