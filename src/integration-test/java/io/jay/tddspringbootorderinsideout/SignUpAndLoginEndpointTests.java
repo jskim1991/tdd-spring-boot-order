@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,8 +19,7 @@ import org.springframework.web.util.NestedServletException;
 import javax.transaction.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -135,5 +135,28 @@ public class SignUpAndLoginEndpointTests {
                         .contentType(MediaType.APPLICATION_JSON))
         );
         assertThat(exception.getCause().getMessage(), equalTo("Invalid username or password"));
+    }
+
+    @Test
+    void test_signupWithSameEmail_throwsException() throws Exception {
+        LoginRequestDto loginRequest = LoginRequestDto.builder()
+                .email("user@email.com")
+                .password("password")
+                .build();
+        Exception exception = null;
+        mockMvc.perform(post("/signup")
+                .content(mapper.writeValueAsString(loginRequest))
+                .contentType(MediaType.APPLICATION_JSON));
+
+        try {
+            mockMvc.perform(post("/signup")
+                    .content(mapper.writeValueAsString(loginRequest))
+                    .contentType(MediaType.APPLICATION_JSON));
+        } catch (Exception e) {
+            exception = e;
+        }
+
+
+        assertThat(exception.getCause(), instanceOf(DataIntegrityViolationException.class));
     }
 }
