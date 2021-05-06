@@ -1,14 +1,17 @@
 package io.jay.tddspringbootorderinsideout.service;
 
+import io.jay.tddspringbootorderinsideout.domain.User;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.store.UserStore;
-import io.jay.tddspringbootorderinsideout.domain.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserLogic implements UserService {
+public class UserLogic implements UserService, UserDetailsService {
 
     private UserStore userStore;
 
@@ -42,5 +45,15 @@ public class UserLogic implements UserService {
     public void delete(String id) {
         userStore.getUser(id);
         userStore.deleteUser(id);
+    }
+
+    @Override
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+        try {
+            User user = userStore.getUserByEmail(email);
+            return user;
+        } catch (Exception e) {
+            throw new UsernameNotFoundException(e.getMessage());
+        }
     }
 }

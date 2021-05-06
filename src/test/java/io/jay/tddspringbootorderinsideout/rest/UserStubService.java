@@ -1,4 +1,4 @@
-package io.jay.tddspringbootorderinsideout.rest.doubles;
+package io.jay.tddspringbootorderinsideout.rest;
 
 import io.jay.tddspringbootorderinsideout.domain.User;
 import io.jay.tddspringbootorderinsideout.service.UserService;

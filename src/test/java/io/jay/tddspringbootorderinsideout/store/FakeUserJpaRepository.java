@@ -1,4 +1,4 @@
-package io.jay.tddspringbootorderinsideout.store.doubles;
+package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.store.entity.UserEntity;
 import io.jay.tddspringbootorderinsideout.store.jpa.UserJpaRepository;

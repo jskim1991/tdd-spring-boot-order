@@ -2,8 +2,6 @@ package io.jay.tddspringbootorderinsideout.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jay.tddspringbootorderinsideout.domain.User;
-import io.jay.tddspringbootorderinsideout.rest.doubles.UserSpyService;
-import io.jay.tddspringbootorderinsideout.rest.doubles.UserStubService;
 import io.jay.tddspringbootorderinsideout.share.JsonUtil;
 import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;

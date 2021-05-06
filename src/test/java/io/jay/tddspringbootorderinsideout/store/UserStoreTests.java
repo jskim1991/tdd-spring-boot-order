@@ -5,7 +5,6 @@ import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.store.entity.UserEntity;
 import io.jay.tddspringbootorderinsideout.store.exception.NoSuchUserException;
 import io.jay.tddspringbootorderinsideout.domain.User;
-import io.jay.tddspringbootorderinsideout.store.doubles.FakeUserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

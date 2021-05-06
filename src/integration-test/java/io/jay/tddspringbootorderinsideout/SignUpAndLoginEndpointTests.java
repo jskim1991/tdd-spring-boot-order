@@ -148,6 +148,7 @@ public class SignUpAndLoginEndpointTests {
                 .content(mapper.writeValueAsString(loginRequest))
                 .contentType(MediaType.APPLICATION_JSON));
 
+
         try {
             mockMvc.perform(post("/signup")
                     .content(mapper.writeValueAsString(loginRequest))

@@ -6,9 +6,11 @@ import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.store.UserJpaStore;
 import io.jay.tddspringbootorderinsideout.store.UserStore;
 import io.jay.tddspringbootorderinsideout.store.exception.NoSuchUserException;
-import io.jay.tddspringbootorderinsideout.store.doubles.FakeUserJpaRepository;
+import io.jay.tddspringbootorderinsideout.store.FakeUserJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,6 +100,7 @@ public class UserServiceTests {
         User savedUser = userStore.addUser(john);
         String id = savedUser.getId();
 
+
         userLogic.delete(id);
 
 
@@ -105,7 +108,23 @@ public class UserServiceTests {
     }
 
     @Test
-    void  test_deleteUserWhenEmpty_throwsException() {
+    void test_deleteUserWhenEmpty_throwsException() {
         assertThrows(NoSuchUserException.class, () -> userLogic.delete("999"));
+    }
+
+    @Test
+    void test_loadUserByUsername_returnsUserWithCorrectEmail() {
+        userStore.addUser(User.builder().email("email").build());
+
+
+        User user = userLogic.loadUserByUsername("email");
+
+
+        assertThat(user.getEmail(), equalTo("email"));
+    }
+
+    @Test
+    void test_loadByUsernameWhenEmpty_throwsException() {
+        assertThrows(UsernameNotFoundException.class, () -> userLogic.loadUserByUsername("email"));
     }
 }

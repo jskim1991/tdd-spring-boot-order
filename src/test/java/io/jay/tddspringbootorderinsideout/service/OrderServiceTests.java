@@ -1,7 +1,7 @@
 package io.jay.tddspringbootorderinsideout.service;
 
 import io.jay.tddspringbootorderinsideout.domain.Order;
-import io.jay.tddspringbootorderinsideout.store.doubles.FakeOrderJpaRepository;
+import io.jay.tddspringbootorderinsideout.store.FakeOrderJpaRepository;
 import io.jay.tddspringbootorderinsideout.share.NameValue;
 import io.jay.tddspringbootorderinsideout.share.NameValueList;
 import io.jay.tddspringbootorderinsideout.store.OrderJpaStore;
@@ -97,7 +97,7 @@ public class OrderServiceTests {
     }
 
     @Test
-    void  test_deleteOrderWhenEmpty_throwsException() {
+    void test_deleteOrderWhenEmpty_throwsException() {
         assertThrows(NoSuchOrderException.class, () -> orderLogic.deleteOrder("999"));
     }
 }
