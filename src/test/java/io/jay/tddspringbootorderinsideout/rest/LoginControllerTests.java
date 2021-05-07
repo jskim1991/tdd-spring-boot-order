@@ -3,7 +3,6 @@ package io.jay.tddspringbootorderinsideout.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jay.tddspringbootorderinsideout.domain.User;
 import io.jay.tddspringbootorderinsideout.rest.dto.LoginRequestDto;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -26,7 +25,7 @@ public class LoginControllerTests {
     private ObjectMapper mapper;
     private MockMvc mockMvc;
     private SpyStubUserStore spyStubUserStore;
-    private SpyStubJwtTokenUtil spyStubjwtTokenUtil;
+    private SpyStubAPIAccessTokenGenerator spyStubTokenGenerator;
     private PasswordEncoder passwordEncoder;
     private User user;
     private LoginRequestDto loginRequestDto;
@@ -35,14 +34,14 @@ public class LoginControllerTests {
     void setup() {
         mapper = new ObjectMapper();
         spyStubUserStore = new SpyStubUserStore();
-        spyStubjwtTokenUtil = new SpyStubJwtTokenUtil();
+        spyStubTokenGenerator = new SpyStubAPIAccessTokenGenerator();
         passwordEncoder = new BCryptPasswordEncoder();
         mockMvc = MockMvcBuilders
-                .standaloneSetup(new LoginController(spyStubUserStore, spyStubjwtTokenUtil, passwordEncoder))
+                .standaloneSetup(new LoginController(spyStubUserStore, spyStubTokenGenerator, passwordEncoder))
                 .build();
 
-        spyStubjwtTokenUtil.setCreateAccessToken_return_value("some access token");
-        spyStubjwtTokenUtil.setCreateRefreshToken_return_value("some refresh token");
+        spyStubTokenGenerator.setCreateAccessToken_return_value("some access token");
+        spyStubTokenGenerator.setCreateRefreshToken_return_value("some refresh token");
 
         loginRequestDto = LoginRequestDto.builder()
                 .email("user@email.com")
@@ -88,8 +87,11 @@ public class LoginControllerTests {
                 .contentType(MediaType.APPLICATION_JSON));
 
 
-        assertThat(spyStubjwtTokenUtil.getCreateAccessToken_argument_user(),equalTo(user));
-        assertThat(spyStubjwtTokenUtil.getCreateRefreshToken_argument_user(),equalTo(user));
+        assertThat(spyStubTokenGenerator.getCreateAccessToken_argument_email(),equalTo(user.getEmail()));
+        assertThat(spyStubTokenGenerator.getCreateAccessToken_argument_roles(),equalTo(user.getRoles()));
+
+        assertThat(spyStubTokenGenerator.getCreateRefreshToken_argument_email(),equalTo(user.getEmail()));
+        assertThat(spyStubTokenGenerator.getCreateRefreshToken_argument_roles(),equalTo(user.getRoles()));
     }
 
     @Test

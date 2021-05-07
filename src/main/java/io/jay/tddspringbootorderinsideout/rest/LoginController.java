@@ -4,7 +4,7 @@ import io.jay.tddspringbootorderinsideout.domain.User;
 import io.jay.tddspringbootorderinsideout.rest.dto.LoginRequestDto;
 import io.jay.tddspringbootorderinsideout.rest.dto.TokenResponse;
 import io.jay.tddspringbootorderinsideout.store.UserStore;
-import io.jay.tddspringbootorderinsideout.util.JwtTokenUtil;
+import io.jay.tddspringbootorderinsideout.util.APIAccessTokenGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private final UserStore userStore;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final APIAccessTokenGenerator APIAccessTokenGenerator;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginController(UserStore userStore, JwtTokenUtil jwtTokenUtil, PasswordEncoder passwordEncoder) {
+    public LoginController(UserStore userStore, APIAccessTokenGenerator APIAccessTokenGenerator, PasswordEncoder passwordEncoder) {
         this.userStore = userStore;
-        this.jwtTokenUtil = jwtTokenUtil;
+        this.APIAccessTokenGenerator = APIAccessTokenGenerator;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -30,8 +30,8 @@ public class LoginController {
             throw new RuntimeException("Invalid username or password");
         }
         return TokenResponse.builder()
-                .accessToken(jwtTokenUtil.createAccessToken(user))
-                .refreshToken(jwtTokenUtil.createRefreshToken(user))
+                .accessToken(APIAccessTokenGenerator.createAccessToken(user.getEmail(), user.getRoles()))
+                .refreshToken(APIAccessTokenGenerator.createRefreshToken(user.getEmail(), user.getRoles()))
                 .build();
     }
 }

@@ -17,47 +17,49 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class JwtTokenUtilTests {
+public class JwtAPIAccessTokenGeneratorTests {
 
-    private JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-
-
-    // TODO: don't like the fact that test knows about secretKey
-    private byte[] secretKey = "veryDifficultSecret".getBytes(StandardCharsets.UTF_8);
-
+    private JwtAPIAccessTokenGenerator jwtTokenGenerator;
+    private String secretKey;
     private User user;
 
     @BeforeEach
     void setUp() {
         user = User.builder().email("user@email.com")
                 .roles(Collections.singletonList(UserRole.ROLE_USER)).build();
-
+        secretKey = "onlyTheTestKnowsThisSecret";
+        jwtTokenGenerator = new JwtAPIAccessTokenGenerator(secretKey);
     }
 
     @Test
     void test_accessToken_usesUserEmail() {
-        String accessToken = jwtTokenUtil.createAccessToken(user);
+        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
 
 
-        String subject = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().getSubject();
+        String subject = Jwts
+                .parser()
+                .setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8))
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .getSubject();
         assertThat(subject, equalTo("user@email.com"));
     }
 
     @Test
     void test_accessToken_usesIssueDate() {
-        String accessToken = jwtTokenUtil.createAccessToken(user);
+        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
 
 
-        Date issuedAt = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody().getIssuedAt();
+        Date issuedAt = Jwts.parser().setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(accessToken).getBody().getIssuedAt();
         assertThat(issuedAt, notNullValue());
     }
 
     @Test
     void test_accessToken_hasExpirationOf10Minutes() {
-        String accessToken = jwtTokenUtil.createAccessToken(user);
+        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
 
 
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
+        Claims claims = Jwts.parser().setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(accessToken).getBody();
         Date issuedAt = claims.getIssuedAt();
         Date expiration = claims.getExpiration();
         assertThat(expiration.getTime() - issuedAt.getTime(), equalTo(10 * 60 * 1000L));
@@ -65,10 +67,10 @@ public class JwtTokenUtilTests {
 
     @Test
     void test_accessToken_hasUserRoles() {
-        String accessToken = jwtTokenUtil.createAccessToken(user);
+        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
 
 
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
+        Claims claims = Jwts.parser().setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(accessToken).getBody();
 
         List<UserRole> roles = JsonUtil.fromJsonList(JsonUtil.toJson(claims.get("roles")), UserRole.class);
         assertThat(roles.size(), equalTo(1));
@@ -77,10 +79,10 @@ public class JwtTokenUtilTests {
 
     @Test
     void test_refreshToken_hasExpirationOf30Minutes() {
-        String refreshToken = jwtTokenUtil.createRefreshToken(user);
+        String refreshToken = jwtTokenGenerator.createRefreshToken(user.getEmail(), user.getRoles());
 
 
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken).getBody();
+        Claims claims = Jwts.parser().setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(refreshToken).getBody();
         Date issuedAt = claims.getIssuedAt();
         Date expiration = claims.getExpiration();
         assertThat(expiration.getTime() - issuedAt.getTime(), equalTo(30 * 60 * 1000L));
