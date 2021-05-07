@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserLogic implements UserService, UserDetailsService {
+public class DefaultUserService implements UserService, UserDetailsService {
 
     private UserStore userStore;
 
-    public UserLogic(UserStore userStore) {
+    public DefaultUserService(UserStore userStore) {
         this.userStore = userStore;
     }
 
@@ -43,11 +43,17 @@ public class UserLogic implements UserService, UserDetailsService {
 
     @Override
     public void delete(String id) {
+        // TODO: refactor
         userStore.getUser(id);
         userStore.deleteUser(id);
     }
 
     @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return null;
+    }
+
+    /*@Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
             User user = userStore.getUserByEmail(email);
@@ -55,5 +61,5 @@ public class UserLogic implements UserService, UserDetailsService {
         } catch (Exception e) {
             throw new UsernameNotFoundException(e.getMessage());
         }
-    }
+    }*/
 }
