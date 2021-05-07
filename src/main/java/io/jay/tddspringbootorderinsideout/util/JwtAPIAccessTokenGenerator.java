@@ -4,7 +4,6 @@ import io.jay.tddspringbootorderinsideout.domain.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -14,21 +13,21 @@ import java.util.List;
 @Component
 public class JwtAPIAccessTokenGenerator implements APIAccessTokenGenerator {
 
-    private byte[] secretKey;
-    private final long minutes = 60 * 1000L;
-    private final long accessTokenValidTime = 10 * minutes;
-    private final long refreshTokenValidTime = 30 * minutes;
+    private JwtSecretKey secretKey;
+    private final long MINUTES = 60 * 1000L;
+    private final long ACCESS_TOKEN_VALID_TIME = 10 * MINUTES;
+    private final long REFRESH_TOKEN_VALID_TIME = 30 * MINUTES;
 
-    public JwtAPIAccessTokenGenerator(String secretKey) {
-        this.secretKey = secretKey.getBytes(StandardCharsets.UTF_8);
+    public JwtAPIAccessTokenGenerator(JwtSecretKey secretKey) {
+        this.secretKey = secretKey;
     }
 
     public String createAccessToken(String email, List<UserRole> roles) {
-        return createToken(email, roles, accessTokenValidTime);
+        return createToken(email, roles, ACCESS_TOKEN_VALID_TIME);
     }
 
     public String createRefreshToken(String email, List<UserRole> roles) {
-        return createToken(email, roles, refreshTokenValidTime);
+        return createToken(email, roles, REFRESH_TOKEN_VALID_TIME);
     }
 
     private String createToken(String email, List<UserRole> roles, long validTime) {
@@ -39,7 +38,7 @@ public class JwtAPIAccessTokenGenerator implements APIAccessTokenGenerator {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + validTime))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey.getSecretKeyAsBytes())
                 .compact();
     }
 

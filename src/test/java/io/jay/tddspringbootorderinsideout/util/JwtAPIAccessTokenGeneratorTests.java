@@ -8,7 +8,6 @@ import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -20,15 +19,15 @@ import static org.hamcrest.Matchers.notNullValue;
 public class JwtAPIAccessTokenGeneratorTests {
 
     private JwtAPIAccessTokenGenerator jwtTokenGenerator;
-    private String secretKey;
+    private JwtSecretKey jwtSecretKey;
     private User user;
 
     @BeforeEach
     void setUp() {
         user = User.builder().email("user@email.com")
                 .roles(Collections.singletonList(UserRole.ROLE_USER)).build();
-        secretKey = "onlyTheTestKnowsThisSecret";
-        jwtTokenGenerator = new JwtAPIAccessTokenGenerator(secretKey);
+        jwtSecretKey = new JwtSecretKey("onlyTheTestKnowsThisSecret");
+        jwtTokenGenerator = new JwtAPIAccessTokenGenerator(jwtSecretKey);
     }
 
     @Test
@@ -38,7 +37,7 @@ public class JwtAPIAccessTokenGeneratorTests {
 
         String subject = Jwts
                 .parser()
-                .setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8))
+                .setSigningKey(jwtSecretKey.getSecretKeyAsBytes())
                 .parseClaimsJws(accessToken)
                 .getBody()
                 .getSubject();
@@ -50,7 +49,7 @@ public class JwtAPIAccessTokenGeneratorTests {
         String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
 
 
-        Date issuedAt = Jwts.parser().setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(accessToken).getBody().getIssuedAt();
+        Date issuedAt = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody().getIssuedAt();
         assertThat(issuedAt, notNullValue());
     }
 
@@ -59,7 +58,7 @@ public class JwtAPIAccessTokenGeneratorTests {
         String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
 
 
-        Claims claims = Jwts.parser().setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(accessToken).getBody();
+        Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody();
         Date issuedAt = claims.getIssuedAt();
         Date expiration = claims.getExpiration();
         assertThat(expiration.getTime() - issuedAt.getTime(), equalTo(10 * 60 * 1000L));
@@ -70,7 +69,7 @@ public class JwtAPIAccessTokenGeneratorTests {
         String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
 
 
-        Claims claims = Jwts.parser().setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(accessToken).getBody();
+        Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody();
 
         List<UserRole> roles = JsonUtil.fromJsonList(JsonUtil.toJson(claims.get("roles")), UserRole.class);
         assertThat(roles.size(), equalTo(1));
@@ -82,7 +81,7 @@ public class JwtAPIAccessTokenGeneratorTests {
         String refreshToken = jwtTokenGenerator.createRefreshToken(user.getEmail(), user.getRoles());
 
 
-        Claims claims = Jwts.parser().setSigningKey(secretKey.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(refreshToken).getBody();
+        Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(refreshToken).getBody();
         Date issuedAt = claims.getIssuedAt();
         Date expiration = claims.getExpiration();
         assertThat(expiration.getTime() - issuedAt.getTime(), equalTo(30 * 60 * 1000L));

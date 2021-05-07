@@ -19,12 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class OrderServiceTests {
 
     private OrderStore orderStore;
-    private OrderLogic orderLogic;
+    private DefaultOrderService defaultOrderService;
 
     @BeforeEach
     void setUp() {
         orderStore = new OrderJpaStore(new FakeOrderJpaRepository());
-        orderLogic = new OrderLogic(orderStore);
+        defaultOrderService = new DefaultOrderService(orderStore);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class OrderServiceTests {
         orderStore.addOrder(Order.builder().price(200).build());
 
 
-        List<Order> orders = orderLogic.getAll();
+        List<Order> orders = defaultOrderService.getAll();
 
 
         assertThat(orders.size(), equalTo(2));
@@ -44,7 +44,7 @@ public class OrderServiceTests {
         Order savedOrder = orderStore.addOrder(Order.builder().price(100).build());
 
 
-        Order order = orderLogic.getOrder(savedOrder.getId());
+        Order order = defaultOrderService.getOrder(savedOrder.getId());
 
 
         assertThat(order.getId(), equalTo(savedOrder.getId()));
@@ -54,12 +54,12 @@ public class OrderServiceTests {
     @Test
     void test_getOrderWhenEmpty_throwsException() {
         assertThrows(NoSuchOrderException.class,
-                () -> orderLogic.getOrder("999"));
+                () -> defaultOrderService.getOrder("999"));
     }
 
     @Test
     void test_addOrder_returnsOrder() {
-        Order order = orderLogic.addOrder(Order.builder().price(100).build());
+        Order order = defaultOrderService.addOrder(Order.builder().price(100).build());
 
 
         assertThat(order.getId(), notNullValue());
@@ -72,7 +72,8 @@ public class OrderServiceTests {
         NameValueList nameValueList = new NameValueList();
         nameValueList.add(new NameValue("price", "500"));
 
-        Order updatedOrder = orderLogic.updateOrder(savedOrder.getId(), nameValueList);
+
+        Order updatedOrder = defaultOrderService.updateOrder(savedOrder.getId(), nameValueList);
 
 
         assertThat(updatedOrder.getId(), equalTo(savedOrder.getId()));
@@ -82,7 +83,7 @@ public class OrderServiceTests {
     @Test
     void test_updateOrderWhenEmpty_throwsException() {
         assertThrows(NoSuchOrderException.class,
-                () -> orderLogic.updateOrder("999", new NameValueList()));
+                () -> defaultOrderService.updateOrder("999", new NameValueList()));
     }
 
     @Test
@@ -90,14 +91,14 @@ public class OrderServiceTests {
         Order order = orderStore.addOrder(Order.builder().build());
 
 
-        orderLogic.deleteOrder(order.getId());
+        defaultOrderService.deleteOrder(order.getId());
 
 
-        assertThat(orderLogic.getAll().isEmpty(), equalTo(true));
+        assertThat(defaultOrderService.getAll().isEmpty(), equalTo(true));
     }
 
     @Test
     void test_deleteOrderWhenEmpty_throwsException() {
-        assertThrows(NoSuchOrderException.class, () -> orderLogic.deleteOrder("999"));
+        assertThrows(NoSuchOrderException.class, () -> defaultOrderService.deleteOrder("999"));
     }
 }

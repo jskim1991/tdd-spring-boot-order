@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private final UserStore userStore;
-    private final APIAccessTokenGenerator APIAccessTokenGenerator;
+    private final APIAccessTokenGenerator apiAccessTokenGenerator;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginController(UserStore userStore, APIAccessTokenGenerator APIAccessTokenGenerator, PasswordEncoder passwordEncoder) {
+    public LoginController(UserStore userStore, APIAccessTokenGenerator apiAccessTokenGenerator, PasswordEncoder passwordEncoder) {
         this.userStore = userStore;
-        this.APIAccessTokenGenerator = APIAccessTokenGenerator;
+        this.apiAccessTokenGenerator = apiAccessTokenGenerator;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -30,8 +30,8 @@ public class LoginController {
             throw new RuntimeException("Invalid username or password");
         }
         return TokenResponse.builder()
-                .accessToken(APIAccessTokenGenerator.createAccessToken(user.getEmail(), user.getRoles()))
-                .refreshToken(APIAccessTokenGenerator.createRefreshToken(user.getEmail(), user.getRoles()))
+                .accessToken(apiAccessTokenGenerator.createAccessToken(user.getEmail(), user.getRoles()))
+                .refreshToken(apiAccessTokenGenerator.createRefreshToken(user.getEmail(), user.getRoles()))
                 .build();
     }
 }

@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderLogic implements OrderService {
+public class DefaultOrderService implements OrderService {
 
     private OrderStore orderStore;
 
-    public OrderLogic(OrderStore orderStore) {
+    public DefaultOrderService(OrderStore orderStore) {
         this.orderStore = orderStore;
     }
 

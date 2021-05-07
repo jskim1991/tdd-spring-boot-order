@@ -26,14 +26,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class OrderControllerTests {
 
-    private OrderService orderService;
+    private OrderService mockOrderService;
     private MockMvc mockMvc;
 
     @BeforeEach
     public void setup() {
-        orderService = Mockito.mock(OrderService.class);
+        mockOrderService = Mockito.mock(OrderService.class);
         mockMvc = MockMvcBuilders
-                .standaloneSetup(new OrderController(orderService))
+                .standaloneSetup(new OrderController(mockOrderService))
                 .build();
     }
 
@@ -45,7 +45,7 @@ public class OrderControllerTests {
 
     @Test
     void test_getAll_returnsListOfOrders() throws Exception {
-        when(orderService.getAll())
+        when(mockOrderService.getAll())
                 .thenReturn(Collections.singletonList(
                         Order.builder().price(100).build()
                 ));
@@ -59,7 +59,7 @@ public class OrderControllerTests {
 
     @Test
     void test_getOrder_returnsOrder() throws Exception {
-        when(orderService.getOrder("1"))
+        when(mockOrderService.getOrder("1"))
                 .thenReturn(Order.builder().price(100).build());
 
 
@@ -77,13 +77,13 @@ public class OrderControllerTests {
         mockMvc.perform(get("/orders/999"));
 
 
-        verify(orderService, times(1)).getOrder(argumentCaptor.capture());
+        verify(mockOrderService, times(1)).getOrder(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue(), equalTo("999"));
     }
 
     @Test
     void test_addOrder_returnsOrder() throws Exception {
-        when(orderService.addOrder(any(Order.class)))
+        when(mockOrderService.addOrder(any(Order.class)))
                 .thenReturn(Order.builder().price(100).build());
 
 
@@ -107,7 +107,7 @@ public class OrderControllerTests {
                 .contentType(MediaType.APPLICATION_JSON));
 
 
-        verify(orderService).addOrder(argumentCaptor.capture());
+        verify(mockOrderService).addOrder(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getPrice(), equalTo(100));
     }
 
@@ -133,7 +133,7 @@ public class OrderControllerTests {
                 .contentType(MediaType.APPLICATION_JSON));
 
 
-        verify(orderService).updateOrder(idCaptor.capture(), updateFieldsCaptor.capture());
+        verify(mockOrderService).updateOrder(idCaptor.capture(), updateFieldsCaptor.capture());
         assertThat(idCaptor.getValue(), equalTo("1"));
         assertThat(updateFieldsCaptor.getValue().getNameValues().get(0).getValue(), equalTo("200"));
         assertThat(updateFieldsCaptor.getValue().getNameValues().get(0).getName(), equalTo("price"));
@@ -141,7 +141,7 @@ public class OrderControllerTests {
 
     @Test
     void test_updateOrder_returnsOrder() throws Exception {
-        when(orderService.updateOrder(any(), any()))
+        when(mockOrderService.updateOrder(any(), any()))
                 .thenReturn(Order.builder().price(100).build());
 
         mockMvc.perform(patch("/orders/1")
@@ -166,7 +166,7 @@ public class OrderControllerTests {
         mockMvc.perform(delete("/orders/1"));
 
 
-        verify(orderService).deleteOrder(idCaptor.capture());
+        verify(mockOrderService).deleteOrder(idCaptor.capture());
         assertThat(idCaptor.getValue(), equalTo("1"));
     }
 }

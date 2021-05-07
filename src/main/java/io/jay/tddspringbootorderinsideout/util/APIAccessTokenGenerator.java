@@ -1,6 +1,5 @@
 package io.jay.tddspringbootorderinsideout.util;
 
-import io.jay.tddspringbootorderinsideout.domain.User;
 import io.jay.tddspringbootorderinsideout.domain.UserRole;
 
 import java.util.List;
