@@ -49,11 +49,6 @@ public class DefaultUserService implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return null;
-    }
-
-    /*@Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         try {
             User user = userStore.getUserByEmail(email);
@@ -61,5 +56,5 @@ public class DefaultUserService implements UserService, UserDetailsService {
         } catch (Exception e) {
             throw new UsernameNotFoundException(e.getMessage());
         }
-    }*/
+    }
 }

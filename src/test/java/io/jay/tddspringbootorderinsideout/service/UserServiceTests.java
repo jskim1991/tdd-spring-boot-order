@@ -111,21 +111,19 @@ public class UserServiceTests {
         assertThrows(NoSuchUserException.class, () -> defaultUserService.delete("999"));
     }
 
-//    @Test
-//    void test_loadUserByUsername_returnsUserWithCorrectEmail() {
-//        userStore.addUser(User.builder().email("email").build());
-//
-//
-//        // TODO: fix after
-//        User user = defaultUserService.loadUserByUsername("email");
-//
-//
-//        assertThat(user.getEmail(), equalTo("email"));
-//    }
+    @Test
+    void test_loadUserByUsername_returnsUserWithCorrectEmail() {
+        userStore.addUser(User.builder().email("email").build());
 
-    // TODO: fix after
-//    @Test
-//    void test_loadByUsernameWhenEmpty_throwsException() {
-//        assertThrows(UsernameNotFoundException.class, () -> defaultUserService.loadUserByUsername("email"));
-//    }
+
+        User user = defaultUserService.loadUserByUsername("email");
+
+
+        assertThat(user.getEmail(), equalTo("email"));
+    }
+
+    @Test
+    void test_loadByUsernameWhenEmpty_throwsException() {
+        assertThrows(UsernameNotFoundException.class, () -> defaultUserService.loadUserByUsername("email"));
+    }
 }
