@@ -1,6 +1,6 @@
 package io.jay.tddspringbootorderinsideout.config;
 
-import io.jay.tddspringbootorderinsideout.util.JwtSecretKey;
+import io.jay.tddspringbootorderinsideout.share.token.JwtSecretKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
