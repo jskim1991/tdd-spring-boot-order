@@ -3,8 +3,6 @@ package io.jay.tddspringbootorderinsideout.share.token;
 import io.jay.tddspringbootorderinsideout.authentication.domain.User;
 import io.jay.tddspringbootorderinsideout.authentication.domain.UserRole;
 import io.jay.tddspringbootorderinsideout.share.json.JsonUtil;
-import io.jay.tddspringbootorderinsideout.share.token.JwtAPIAccessTokenGenerator;
-import io.jay.tddspringbootorderinsideout.share.token.JwtSecretKey;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,9 +16,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class JwtAPIAccessTokenGeneratorTests {
+public class JwtEndpointAccessTokenGeneratorTests {
 
-    private JwtAPIAccessTokenGenerator jwtTokenGenerator;
+    private JwtEndpointAccessTokenGenerator jwtTokenGenerator;
     private JwtSecretKey jwtSecretKey;
     private User user;
 
@@ -29,12 +27,12 @@ public class JwtAPIAccessTokenGeneratorTests {
         user = User.builder().email("user@email.com")
                 .roles(Collections.singletonList(UserRole.ROLE_USER)).build();
         jwtSecretKey = new JwtSecretKey("onlyTheTestKnowsThisSecret");
-        jwtTokenGenerator = new JwtAPIAccessTokenGenerator(jwtSecretKey);
+        jwtTokenGenerator = new JwtEndpointAccessTokenGenerator(jwtSecretKey);
     }
 
     @Test
     void test_accessToken_usesUserEmail() {
-        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
+        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRolesAsString());
 
 
         String subject = Jwts
@@ -48,7 +46,7 @@ public class JwtAPIAccessTokenGeneratorTests {
 
     @Test
     void test_accessToken_usesIssueDate() {
-        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
+        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRolesAsString());
 
 
         Date issuedAt = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody().getIssuedAt();
@@ -57,7 +55,7 @@ public class JwtAPIAccessTokenGeneratorTests {
 
     @Test
     void test_accessToken_hasExpirationOf10Minutes() {
-        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
+        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRolesAsString());
 
 
         Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody();
@@ -68,7 +66,7 @@ public class JwtAPIAccessTokenGeneratorTests {
 
     @Test
     void test_accessToken_hasUserRoles() {
-        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRoles());
+        String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRolesAsString());
 
 
         Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody();
@@ -80,7 +78,7 @@ public class JwtAPIAccessTokenGeneratorTests {
 
     @Test
     void test_refreshToken_hasExpirationOf30Minutes() {
-        String refreshToken = jwtTokenGenerator.createRefreshToken(user.getEmail(), user.getRoles());
+        String refreshToken = jwtTokenGenerator.createRefreshToken(user.getEmail(), user.getRolesAsString());
 
 
         Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(refreshToken).getBody();

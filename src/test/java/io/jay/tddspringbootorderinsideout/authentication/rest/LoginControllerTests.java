@@ -3,7 +3,7 @@ package io.jay.tddspringbootorderinsideout.authentication.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jay.tddspringbootorderinsideout.authentication.domain.User;
 import io.jay.tddspringbootorderinsideout.authentication.rest.dto.LoginRequestDto;
-import io.jay.tddspringbootorderinsideout.share.token.SpyStubAPIAccessTokenGenerator;
+import io.jay.tddspringbootorderinsideout.share.token.SpyStubEndpointAccessTokenGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -26,7 +26,7 @@ public class LoginControllerTests {
     private ObjectMapper mapper;
     private MockMvc mockMvc;
     private SpyStubUserStore spyStubUserStore;
-    private SpyStubAPIAccessTokenGenerator spyStubTokenGenerator;
+    private SpyStubEndpointAccessTokenGenerator spyStubTokenGenerator;
     private PasswordEncoder passwordEncoder;
     private User user;
     private LoginRequestDto loginRequestDto;
@@ -35,7 +35,7 @@ public class LoginControllerTests {
     void setup() {
         mapper = new ObjectMapper();
         spyStubUserStore = new SpyStubUserStore();
-        spyStubTokenGenerator = new SpyStubAPIAccessTokenGenerator();
+        spyStubTokenGenerator = new SpyStubEndpointAccessTokenGenerator();
         passwordEncoder = new BCryptPasswordEncoder();
         mockMvc = MockMvcBuilders
                 .standaloneSetup(new LoginController(spyStubUserStore, spyStubTokenGenerator, passwordEncoder))

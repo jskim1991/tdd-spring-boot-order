@@ -1,28 +1,25 @@
 package io.jay.tddspringbootorderinsideout.share.token;
 
-import io.jay.tddspringbootorderinsideout.authentication.domain.UserRole;
-import io.jay.tddspringbootorderinsideout.share.token.APIAccessTokenGenerator;
-
 import java.util.List;
 
-public class SpyStubAPIAccessTokenGenerator implements APIAccessTokenGenerator {
+public class SpyStubEndpointAccessTokenGenerator implements EndpointAccessTokenGenerator {
 
     private String createAccessToken_return_value;
     private String createRefreshToken_return_value;
     private String createRefreshToken_argument_email;
-    private List<UserRole> createRefreshToken_argument_roles;
+    private List<String> createRefreshToken_argument_roles;
     private String createAccessToken_argument_email;
-    private List<UserRole> createAccessToken_argument_roles;
+    private List<String> createAccessToken_argument_roles;
 
     @Override
-    public String createAccessToken(String email, List<UserRole> roles) {
+    public String createAccessToken(String email, List<String> roles) {
         createAccessToken_argument_email = email;
         createAccessToken_argument_roles = roles;
         return createAccessToken_return_value;
     }
 
     @Override
-    public String createRefreshToken(String email, List<UserRole> roles) {
+    public String createRefreshToken(String email, List<String> roles) {
         createRefreshToken_argument_email = email;
         createRefreshToken_argument_roles = roles;
         return createRefreshToken_return_value;
@@ -40,7 +37,7 @@ public class SpyStubAPIAccessTokenGenerator implements APIAccessTokenGenerator {
         return createRefreshToken_argument_email;
     }
 
-    public List<UserRole> getCreateRefreshToken_argument_roles() {
+    public List<String> getCreateRefreshToken_argument_roles() {
         return createRefreshToken_argument_roles;
     }
 
@@ -48,7 +45,7 @@ public class SpyStubAPIAccessTokenGenerator implements APIAccessTokenGenerator {
         return createAccessToken_argument_email;
     }
 
-    public List<UserRole> getCreateAccessToken_argument_roles() {
+    public List<String> getCreateAccessToken_argument_roles() {
         return createAccessToken_argument_roles;
     }
 }

@@ -94,4 +94,10 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public List<String> getRolesAsString() {
+        return roles.stream()
+                .map(UserRole::name)
+                .collect(Collectors.toList());
+    }
 }

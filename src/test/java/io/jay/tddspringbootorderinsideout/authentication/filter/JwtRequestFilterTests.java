@@ -2,15 +2,13 @@ package io.jay.tddspringbootorderinsideout.authentication.filter;
 
 import io.jay.tddspringbootorderinsideout.authentication.domain.User;
 import io.jay.tddspringbootorderinsideout.authentication.domain.UserRole;
-import io.jay.tddspringbootorderinsideout.authentication.filter.JwtRequestFilter;
 import io.jay.tddspringbootorderinsideout.authentication.service.DefaultUserService;
-import io.jay.tddspringbootorderinsideout.share.token.APIAccessTokenGenerator;
-import io.jay.tddspringbootorderinsideout.share.token.JwtAPIAccessTokenGenerator;
+import io.jay.tddspringbootorderinsideout.share.token.EndpointAccessTokenGenerator;
+import io.jay.tddspringbootorderinsideout.share.token.JwtEndpointAccessTokenGenerator;
 import io.jay.tddspringbootorderinsideout.share.token.JwtSecretKey;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -66,8 +64,8 @@ public class JwtRequestFilterTests {
         SecurityContextHolder.setContext(securityContext);
 
         jwtSecretKey = new JwtSecretKey("magicSecret");
-        APIAccessTokenGenerator tokenGenerator = new JwtAPIAccessTokenGenerator(jwtSecretKey);
-        String tokenValue = "Bearer " + tokenGenerator.createAccessToken("user@email.com", Collections.singletonList(UserRole.ROLE_USER));
+        EndpointAccessTokenGenerator tokenGenerator = new JwtEndpointAccessTokenGenerator(jwtSecretKey);
+        String tokenValue = "Bearer " + tokenGenerator.createAccessToken("user@email.com", Collections.singletonList(UserRole.ROLE_USER.name()));
         mockRequest.addHeader("Authorization", tokenValue);
 
         filterToTest = new JwtRequestFilter(mockUserDetailsService, jwtSecretKey);
