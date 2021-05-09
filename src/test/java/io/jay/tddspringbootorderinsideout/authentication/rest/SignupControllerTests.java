@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,7 +23,7 @@ public class SignupControllerTests {
     private PasswordEncoder passwordEncoder;
     private ObjectMapper mapper = new ObjectMapper();
     private User user;
-    private SignupRequestDto signupData;
+    private SignupRequestDto signupRequest;
 
     @BeforeEach
     void setup() {
@@ -34,17 +33,18 @@ public class SignupControllerTests {
                 .standaloneSetup(new SignupController(spyStubUserStore, passwordEncoder))
                 .build();
         user = User.builder().build();
-        signupData = SignupRequestDto.builder()
+        signupRequest = SignupRequestDto.builder()
                 .email("user@email.com")
                 .password("password")
                 .build();
+
         spyStubUserStore.setAddUser_return_value(user);
     }
 
     @Test
     void test_signup_returnsOk() throws Exception {
         mockMvc.perform(post("/signup")
-                .content(mapper.writeValueAsString(signupData))
+                .content(mapper.writeValueAsString(signupRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -52,7 +52,7 @@ public class SignupControllerTests {
     @Test
     void test_signup_returnsId() throws Exception {
         String returnedId = mockMvc.perform(post("/signup")
-                .content(mapper.writeValueAsString(signupData))
+                .content(mapper.writeValueAsString(signupRequest))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andReturn()
                 .getResponse()
@@ -61,24 +61,13 @@ public class SignupControllerTests {
     }
 
     @Test
-    void test_signup_usesGivenEmail() throws Exception {
+    void test_signup_usesGivenEmailAndEncodedPassword() throws Exception {
         mockMvc.perform(post("/signup")
-                .content(mapper.writeValueAsString(signupData))
+                .content(mapper.writeValueAsString(signupRequest))
                 .contentType(MediaType.APPLICATION_JSON));
 
 
         assertThat(spyStubUserStore.getSignup_argument_email(), equalTo("user@email.com"));
-    }
-
-    @Test
-    void test_signup_usesEncodedPassword() throws Exception {
-        mockMvc.perform(post("/signup")
-                .content(mapper.writeValueAsString(SignupRequestDto.builder()
-                        .password("password")
-                        .build()))
-                .contentType(MediaType.APPLICATION_JSON));
-
-
         assertThat(passwordEncoder.matches("password", spyStubUserStore.getSignup_argument_password()), equalTo(true));
     }
 }

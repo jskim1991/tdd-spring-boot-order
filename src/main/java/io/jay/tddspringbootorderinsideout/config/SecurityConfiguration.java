@@ -30,9 +30,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                .httpBasic()
-//                .and()
-//                .disable() // rest api 만 고려하여 기본 설정 해제
                 .csrf().disable()
 
                 .authorizeRequests()

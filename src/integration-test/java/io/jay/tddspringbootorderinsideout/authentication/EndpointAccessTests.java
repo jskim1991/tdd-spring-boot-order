@@ -1,6 +1,5 @@
 package io.jay.tddspringbootorderinsideout.authentication;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jay.tddspringbootorderinsideout.authentication.rest.dto.TokenResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,6 @@ public class EndpointAccessTests {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper mapper = new ObjectMapper();
     private AuthenticationTestHelper testHelper;
 
     @BeforeEach
@@ -62,7 +60,7 @@ public class EndpointAccessTests {
 
     @Test
     @Transactional
-    void test_getOrdersWithAccessToken_returnsSuccessfully() throws Exception {
+    void test_getOrdersWithAccessToken_returnsOk() throws Exception {
         testHelper.signUp("user@email.com", "password");
         TokenResponse tokenResponse = testHelper.loginAndReturnToken("user@email.com", "password");
 
@@ -74,7 +72,7 @@ public class EndpointAccessTests {
 
     @Test
     @Transactional
-    void test_getOrdersWithRefreshToken_returnsSuccessfully() throws Exception {
+    void test_getOrdersWithRefreshToken_returnsOk() throws Exception {
         testHelper.signUp("user@email.com", "password");
         TokenResponse tokenResponse = testHelper.loginAndReturnToken("user@email.com", "password");
 
