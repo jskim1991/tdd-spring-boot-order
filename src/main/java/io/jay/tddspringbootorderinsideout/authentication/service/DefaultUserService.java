@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class DefaultUserService implements UserService, UserDetailsService {
 
-    private UserStore userStore;
+    private final UserStore userStore;
 
     public DefaultUserService(UserStore userStore) {
         this.userStore = userStore;

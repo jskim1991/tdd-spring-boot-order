@@ -1,12 +1,12 @@
 package io.jay.tddspringbootorderinsideout.authentication.service;
 
 import io.jay.tddspringbootorderinsideout.authentication.domain.User;
-import io.jay.tddspringbootorderinsideout.share.domain.NameValue;
-import io.jay.tddspringbootorderinsideout.share.domain.NameValueList;
-import io.jay.tddspringbootorderinsideout.authentication.store.UserJpaStore;
-import io.jay.tddspringbootorderinsideout.authentication.store.UserStore;
 import io.jay.tddspringbootorderinsideout.authentication.exception.NoSuchUserException;
 import io.jay.tddspringbootorderinsideout.authentication.store.FakeUserJpaRepository;
+import io.jay.tddspringbootorderinsideout.authentication.store.UserJpaStore;
+import io.jay.tddspringbootorderinsideout.authentication.store.UserStore;
+import io.jay.tddspringbootorderinsideout.share.domain.NameValue;
+import io.jay.tddspringbootorderinsideout.share.domain.NameValueList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserServiceTests {
@@ -124,6 +125,7 @@ public class UserServiceTests {
 
     @Test
     void test_loadByUsernameWhenEmpty_throwsException() {
-        assertThrows(UsernameNotFoundException.class, () -> defaultUserService.loadUserByUsername("email"));
+        assertThrows(UsernameNotFoundException.class, () ->
+                defaultUserService.loadUserByUsername("email"));
     }
 }
