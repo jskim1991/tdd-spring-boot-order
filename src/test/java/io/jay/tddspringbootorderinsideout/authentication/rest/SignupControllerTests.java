@@ -6,7 +6,7 @@ import io.jay.tddspringbootorderinsideout.authentication.rest.dto.SignupRequestD
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -28,7 +28,7 @@ public class SignupControllerTests {
     @BeforeEach
     void setup() {
         spyStubUserStore = new SpyStubUserStore();
-        passwordEncoder = new BCryptPasswordEncoder();
+        passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         mockMvc = MockMvcBuilders
                 .standaloneSetup(new SignupController(spyStubUserStore, passwordEncoder))
                 .build();
