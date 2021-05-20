@@ -1,4 +1,4 @@
-package io.jay.tddspringbootorderinsideout.shipping.store;
+package io.jay.tddspringbootorderinsideout.store;
 
 import io.jay.tddspringbootorderinsideout.order.domain.Order;
 import io.jay.tddspringbootorderinsideout.authentication.domain.User;

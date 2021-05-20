@@ -60,9 +60,6 @@ public class JwtRequestFilterTests {
 
         mockUserDetailsService = mock(DefaultUserService.class);
 
-        securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-
         jwtSecretKey = new JwtSecretKey("magicSecret");
         EndpointAccessTokenGenerator tokenGenerator = new JwtEndpointAccessTokenGenerator(jwtSecretKey);
         String tokenValue = "Bearer " + tokenGenerator.createAccessToken("user@email.com", Collections.singletonList(UserRole.ROLE_USER.name()));
@@ -73,6 +70,8 @@ public class JwtRequestFilterTests {
 
     @Test
     void test_filter_setsAuthenticationInSecurityContext() throws ServletException, IOException {
+        securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
         when(mockUserDetailsService.loadUserByUsername(anyString()))
                 .thenReturn(user);
 

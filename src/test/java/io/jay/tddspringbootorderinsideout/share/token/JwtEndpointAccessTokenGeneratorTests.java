@@ -35,8 +35,7 @@ public class JwtEndpointAccessTokenGeneratorTests {
         String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRolesAsString());
 
 
-        String subject = Jwts
-                .parser()
+        String subject = Jwts.parser()
                 .setSigningKey(jwtSecretKey.getSecretKeyAsBytes())
                 .parseClaimsJws(accessToken)
                 .getBody()
@@ -49,7 +48,11 @@ public class JwtEndpointAccessTokenGeneratorTests {
         String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRolesAsString());
 
 
-        Date issuedAt = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody().getIssuedAt();
+        Date issuedAt = Jwts.parser()
+                .setSigningKey(jwtSecretKey.getSecretKeyAsBytes())
+                .parseClaimsJws(accessToken)
+                .getBody()
+                .getIssuedAt();
         assertThat(issuedAt, notNullValue());
     }
 
@@ -58,7 +61,10 @@ public class JwtEndpointAccessTokenGeneratorTests {
         String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRolesAsString());
 
 
-        Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody();
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecretKey.getSecretKeyAsBytes())
+                .parseClaimsJws(accessToken)
+                .getBody();
         Date issuedAt = claims.getIssuedAt();
         Date expiration = claims.getExpiration();
         assertThat(expiration.getTime() - issuedAt.getTime(), equalTo(10 * 60 * 1000L));
@@ -69,8 +75,10 @@ public class JwtEndpointAccessTokenGeneratorTests {
         String accessToken = jwtTokenGenerator.createAccessToken(user.getEmail(), user.getRolesAsString());
 
 
-        Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(accessToken).getBody();
-
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecretKey.getSecretKeyAsBytes())
+                .parseClaimsJws(accessToken)
+                .getBody();
         List<UserRole> roles = JsonUtil.fromJsonList(JsonUtil.toJson(claims.get("roles")), UserRole.class);
         assertThat(roles.size(), equalTo(1));
         assertThat(roles.get(0), equalTo(UserRole.ROLE_USER));
@@ -81,7 +89,10 @@ public class JwtEndpointAccessTokenGeneratorTests {
         String refreshToken = jwtTokenGenerator.createRefreshToken(user.getEmail(), user.getRolesAsString());
 
 
-        Claims claims = Jwts.parser().setSigningKey(jwtSecretKey.getSecretKeyAsBytes()).parseClaimsJws(refreshToken).getBody();
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecretKey.getSecretKeyAsBytes())
+                .parseClaimsJws(refreshToken)
+                .getBody();
         Date issuedAt = claims.getIssuedAt();
         Date expiration = claims.getExpiration();
         assertThat(expiration.getTime() - issuedAt.getTime(), equalTo(30 * 60 * 1000L));

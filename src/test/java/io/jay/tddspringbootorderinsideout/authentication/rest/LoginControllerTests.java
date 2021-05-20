@@ -7,7 +7,7 @@ import io.jay.tddspringbootorderinsideout.share.token.SpyStubEndpointAccessToken
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -36,7 +36,7 @@ public class LoginControllerTests {
         mapper = new ObjectMapper();
         spyStubUserStore = new SpyStubUserStore();
         spyStubTokenGenerator = new SpyStubEndpointAccessTokenGenerator();
-        passwordEncoder = new BCryptPasswordEncoder();
+        passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         mockMvc = MockMvcBuilders
                 .standaloneSetup(new LoginController(spyStubUserStore, spyStubTokenGenerator, passwordEncoder))
                 .build();
