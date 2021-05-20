@@ -59,8 +59,8 @@ public class LoginControllerTests {
     void test_login_returnsOk() throws Exception {
         mockMvc.perform(post("/login")
                 .content(mapper.writeValueAsString(loginRequestDto))
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
