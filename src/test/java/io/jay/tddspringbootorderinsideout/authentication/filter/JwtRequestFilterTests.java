@@ -12,13 +12,11 @@ import org.mockito.ArgumentCaptor;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
@@ -26,8 +24,12 @@ import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class JwtRequestFilterTests {
 
@@ -39,11 +41,8 @@ public class JwtRequestFilterTests {
     private User user;
     private UserDetailsService mockUserDetailsService;
 
-    private SecurityContext securityContext;
-
     private JwtSecretKey jwtSecretKey;
-
-    private OncePerRequestFilter filterToTest;
+    private JwtRequestFilter filterToTest;
 
     @BeforeEach
     void setUp() {
@@ -66,29 +65,21 @@ public class JwtRequestFilterTests {
         mockRequest.addHeader("Authorization", tokenValue);
 
         filterToTest = new JwtRequestFilter(mockUserDetailsService, jwtSecretKey);
+
+        SecurityContextHolder.clearContext();
     }
 
     @Test
-    void test_filter_setsAuthenticationInSecurityContext() throws ServletException, IOException {
-        securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
+    void test_filter_continuesToNextFilter() throws ServletException, IOException {
         when(mockUserDetailsService.loadUserByUsername(anyString()))
                 .thenReturn(user);
+        MockFilterChain mockFilterChainSpy = spy(mockFilterChain);
 
 
-        filterToTest.doFilter(mockRequest, mockResponse, mockFilterChain);
+        filterToTest.doFilter(mockRequest, mockResponse, mockFilterChainSpy);
 
 
-        ArgumentCaptor<UsernamePasswordAuthenticationToken> tokenArgumentCaptor = ArgumentCaptor.forClass(UsernamePasswordAuthenticationToken.class);
-        verify(securityContext, times(1)).setAuthentication(tokenArgumentCaptor.capture());
-
-        UsernamePasswordAuthenticationToken invokedArgument = tokenArgumentCaptor.getValue();
-        assertThat(invokedArgument.getPrincipal(), instanceOf(User.class));
-
-        User principal = (User) invokedArgument.getPrincipal();
-        assertThat(principal.getEmail(), equalTo("user@email.com"));
-        assertThat(principal.getRoles().get(0), equalTo(UserRole.ROLE_USER));
-        assertThat(invokedArgument.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")), equalTo(true));
+        verify(mockFilterChainSpy, times(1)).doFilter(mockRequest, mockResponse);
     }
 
     @Test
@@ -106,20 +97,23 @@ public class JwtRequestFilterTests {
     }
 
     @Test
-    void test_filter_continuesToNextFilter() throws ServletException, IOException {
+    void test_filter_setsAuthenticationInSecurityContext() throws ServletException, IOException {
         when(mockUserDetailsService.loadUserByUsername(anyString()))
                 .thenReturn(user);
-        MockFilterChain mockFilterChainSpy = spy(mockFilterChain);
 
 
-        filterToTest.doFilter(mockRequest, mockResponse, mockFilterChainSpy);
+        filterToTest.doFilter(mockRequest, mockResponse, mockFilterChain);
 
 
-        verify(mockFilterChainSpy, times(1)).doFilter(mockRequest, mockResponse);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User principal = (User) authentication.getPrincipal();
+        assertThat(principal.getEmail(), equalTo("user@email.com"));
+        assertThat(principal.getRoles().get(0), equalTo(UserRole.ROLE_USER));
+        assertThat(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER")), equalTo(true));
     }
 
     @Test
-    void test_filterWithoutToken_continuesToNextFilter() throws ServletException, IOException {
+    void test_filter_continuesToNextFilter_whenRequestHasNoToken() throws ServletException, IOException {
         MockFilterChain mockFilterChainSpy = spy(mockFilterChain);
         MockHttpServletRequest requestWithoutToken = new MockHttpServletRequest();
 
